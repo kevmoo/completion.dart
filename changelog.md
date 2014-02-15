@@ -1,5 +1,9 @@
 # Changelog - Dart Bag of Tricks - IO
 
+## 0.25.2 pre-release
+
+* **bot_git** is **DEPRECATED**. Use the `git` package instead.
+
 ## 0.25.1 2013-12-10 (SDK 1.0.2.1 r30821)
 
 * **DEPRECATED** `expandStream`. You likely weren't using it anyway. If you were, it's in `bot` now.
