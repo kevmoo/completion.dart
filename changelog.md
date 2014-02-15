@@ -1,6 +1,6 @@
-# Changelog - Dart Bag of Tricks - IO
+# Changelog - bot_io
 
-## 0.25.2 pre-release
+## 0.25.2 (SDK 1.2.0-dev.5.7 32688)
 
 * **bot_git** is **DEPRECATED**. Use the `git` package instead.
 

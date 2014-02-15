@@ -2,6 +2,7 @@ library test_bot_git;
 
 import 'package:unittest/unittest.dart';
 import 'package:bot_io/bot_git.dart';
+import 'package:git/src/util.dart';
 
 import 'git_dir_tests.dart' as git_dir;
 
