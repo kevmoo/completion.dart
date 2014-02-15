@@ -1,5 +1,5 @@
 name: completion
-version: 0.1.0-dev+1
+version: 0.1.0
 author: Kevin Moore <github@j832.com>
 description: A packaged to add shell command completion to your Dart application
 homepage: https://github.com/kevmoo/completion.dart
