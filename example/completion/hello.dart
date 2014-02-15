@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:bot_io/completion.dart';
 import 'package:args/args.dart';
 
-import '../../test/completion/completion_tests_args.dart';
+import '../../test/completion_tests_args.dart';
 
 void main(List<String> args) {
   /*

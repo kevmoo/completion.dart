@@ -2,9 +2,9 @@ library completion;
 
 import 'dart:io';
 import 'package:args/args.dart';
-import 'package:logging/logging.dart' as logging;
-import 'package:path/path.dart' as pathos;
 import 'package:bot/bot.dart';
+import 'package:logging/logging.dart' as logging;
+import 'package:path/path.dart' as p;
 
 /**
  * The string 'completion' used to denote that arguments proivded to an app are for command
@@ -20,7 +20,7 @@ typedef List<String> ArgCompleter(List<String> args, String compLine, int compPo
 
 void tryCompletion(List<String> args, ArgCompleter completer) {
 
-  final scriptName = pathos.basename(Platform.script.toFilePath());
+  final scriptName = p.basename(Platform.script.toFilePath());
   if(scriptName.isEmpty) {
     // should have a script name...weird...
     return;
@@ -324,6 +324,9 @@ Option _getOptionForArg(ArgParser parser, String arg) {
     assert(abbr.length == 1);
     return parser.findByAbbreviation(abbr);
   }
+
+  // no matching option
+  return null;
 }
 
 Iterable<String> _getParserOptionCompletions(ArgParser parser, Set<Option> existingOptions) {
