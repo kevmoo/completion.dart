@@ -1,9 +1,11 @@
-import 'package:unittest/unittest.dart';
-import 'completion_tests_args.dart';
-import 'package:args/args.dart';
-import 'package:logging/logging.dart';
+library completion.test;
 
-import 'package:bot_io/completion.dart';
+import 'package:args/args.dart';
+import 'package:completion/completion.dart';
+import 'package:logging/logging.dart';
+import 'package:unittest/unittest.dart';
+
+import 'completion_tests_args.dart';
 
 void main() {
   group('completion', () {
