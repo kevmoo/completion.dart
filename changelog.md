@@ -1,5 +1,9 @@
 # Changelog - completion
 
+## 0.1.1 2014-03-04
+ * Removed unneeded dependency on `bot_io`
+ * Cleanup of other references to `bot_io`
+
 ## 0.1.0 2014-02-15 (SDK 1.2.0-dev.5.7 32688)
  * First release
  * Maintains 100% compatibility with the `completion` library from the `bot_io`
