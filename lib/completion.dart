@@ -403,7 +403,7 @@ void _log(Object o, [List<String> subContexts]) {
     safe = 'Error converting provided object $o into String\nException:\t$e\Stack:\t$stack';
   }
 
-  final startArgs = ['bot_io', 'completion'];
+  final startArgs = ['completion'];
   if(subContexts != null) {
     startArgs.addAll(subContexts);
   }

@@ -1,6 +1,6 @@
 #!/usr/bin/env dart --checked
 
-library bot_io.completion_sample;
+library completion.sample;
 
 import 'dart:io';
 import 'package:args/args.dart';
@@ -13,8 +13,8 @@ void main(List<String> args) {
    * It's nice to see what the completer is doing, but printing out debug
    * strings during completion isn't...smart
    *
-   * Uncomment the below line to set up logging. You'll see output from
-   * the bot_io completion logic
+   * Uncomment the below line to set up logging. You'll see output from the
+   * completion logic.
    *
    * It's put into `hello.dart.log`
    *

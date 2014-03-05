@@ -1,4 +1,4 @@
-library test_bot_io.completion_args;
+library completion.test_args;
 
 import 'package:args/args.dart';
 
