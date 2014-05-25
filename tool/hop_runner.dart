@@ -2,8 +2,11 @@ library hop_runner;
 
 import 'dart:async';
 import 'dart:io';
+
 import 'package:hop/hop.dart';
-import 'package:hop/hop_tasks.dart';
+import 'package:hop/hop_tasks.dart' hide createUnitTestTask;
+import 'package:hop_unittest/hop_unittest.dart';
+
 import '../test/harness_console.dart' as test_console;
 
 void main(List<String> args) {

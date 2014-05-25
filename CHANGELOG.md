@@ -1,4 +1,10 @@
-# Changelog - completion
+## 0.1.2+1
+
+ * Updated `hop` and added `hop_unittest` dev dependencies.
+
+## 0.1.2
+
+* Fixed test runner.
 
 ## 0.1.1 2014-03-04
  * Removed unneeded dependency on `bot_io`
