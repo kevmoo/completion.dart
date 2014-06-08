@@ -18,12 +18,13 @@ const String COMPLETION_COMMAND_NAME = 'completion';
 
 const _COMP_POINT_VAR = 'COMP_POINT';
 
-typedef List<String> ArgCompleter(List<String> args, String compLine, int compPoint);
+typedef List<String> ArgCompleter(List<String> args, String compLine,
+    int compPoint);
 
 void tryCompletion(List<String> args, ArgCompleter completer) {
 
   final scriptName = p.basename(Platform.script.toFilePath());
-  if(scriptName.isEmpty) {
+  if (scriptName.isEmpty) {
     // should have a script name...weird...
     return;
   }
@@ -60,7 +61,7 @@ void tryCompletion(List<String> args, ArgCompleter completer) {
 
       _log('completions: ${_helpfulToString(completions)}');
 
-      for(final comp in completions) {
+      for (final comp in completions) {
         print(comp);
       }
       exit(0);
@@ -92,13 +93,13 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   assert(parser != null);
   assert(providedArgs != null);
   // all arg entries: no empty items, no null items, all pre-trimmed
-  for(int i = 0; i < providedArgs.length; i++) {
+  for (int i = 0; i < providedArgs.length; i++) {
     final arg = providedArgs[i];
     final msg = 'Arg at index $i with value "$arg" ';
     require(arg != null, msg + 'is null');
     require(arg.trim() == arg, msg + 'has whitespace');
 
-    if(i < (providedArgs.length-1)) {
+    if (i < (providedArgs.length - 1)) {
       require(!arg.isEmpty, msg + 'Only the last arg can be an empty string');
     }
   }
@@ -111,13 +112,13 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   sublog('COMP_LINE:  "$compLine"');
   sublog('COMP_POINT:  $compPoint');
 
-  if(compPoint < compLine.length) {
+  if (compPoint < compLine.length) {
     // TODO: ponder smart ways to handle in-line completion
     sublog('cursor is in the middle of the line. NO-OP');
     return [];
   }
 
-  if(providedArgs.isEmpty) {
+  if (providedArgs.isEmpty) {
     sublog('empty args. Complete with all available commands');
     return parser.commands.keys.toList();
   }
@@ -167,7 +168,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    * CASE: we have a command
    * get recursive
    */
-  if(subsetResult != null && subsetResult.command != null) {
+  if (subsetResult != null && subsetResult.command != null) {
     // get all of the args *after* the command name
     // call in recursively with the sub command parser, right?
     final subCommand = subsetResult.command;
@@ -201,16 +202,15 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    * CASE: one removed item, that looks like a partial option
    * try to match it against available options
    */
-  if(removedItems.length == 1 &&
-      removedItems.single.startsWith('--')) {
+  if (removedItems.length == 1 && removedItems.single.startsWith('--')) {
 
     final removedItem = removedItems.single;
 
-    if(compLine.endsWith(' ')) {
+    if (compLine.endsWith(' ')) {
       // if the removed item maps to an option w/ allowed values
       // we should return those values to complete against
-      final option = alignedArgsOptions[providedArgs.length-1];
-      if(option != null && option.allowed != null && !option.allowed.isEmpty) {
+      final option = alignedArgsOptions[providedArgs.length - 1];
+      if (option != null && option.allowed != null && !option.allowed.isEmpty) {
         assert(!option.isFlag);
 
         sublog('completing all allowed value for option "${option.name}"');
@@ -232,17 +232,16 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    * CASE: second-to-last arg is an option+allowed and lastArg is empty
    * then we should complete with the available options, right?
    */
-  if(providedArgs.length >= 2) {
+  if (providedArgs.length >= 2) {
     final option = alignedArgsOptions[providedArgs.length - 2];
-    if(option != null) {
+    if (option != null) {
 
-      if(option.allowed != null &&
-        !option.allowed.isEmpty) {
+      if (option.allowed != null && !option.allowed.isEmpty) {
 
         assert(!option.isFlag);
         sublog('completing option "${option.name}"');
 
-        final String optionValue = providedArgs[providedArgs.length-1];
+        final String optionValue = providedArgs[providedArgs.length - 1];
 
         return option.allowed
             .where((String v) => v.startsWith(optionValue))
@@ -257,7 +256,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   /*
    * CASE: no removed items and compLine ends in a space -> do command completion
    */
-  if(removedItems.isEmpty && lastArg == '') {
+  if (removedItems.isEmpty && lastArg == '') {
 
     sublog('doing command completion');
 
@@ -267,7 +266,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   /*
    * CASE: If we have '--', then let's naively complete all options
    */
-  if(lastArg == '--') {
+  if (lastArg == '--') {
     sublog('Completing with all available options.');
     return parserOptionCompletions;
   }
@@ -276,7 +275,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    * CASE: a partial command name?
    * if the last arg doesn't start with a '-'
    */
-  if(!lastArg.startsWith('-')) {
+  if (!lastArg.startsWith('-')) {
     // for now, let's pretend this is partial command
 
     sublog('completing command names that start with "$lastArg"');
@@ -290,7 +289,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    * CASE: the last argument is valid, so we should return it
    * if types the last char of a valid option, hitting tab should complete it
    */
-  if(lastArg != '' && parserOptionCompletions.contains(lastArg)) {
+  if (lastArg != '' && parserOptionCompletions.contains(lastArg)) {
     sublog('completing final arg');
     return [lastArg];
   }
@@ -303,25 +302,25 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
 Option _getOptionForArg(ArgParser parser, String arg) {
 
   // could be a full arg name
-  if(arg.startsWith('--')) {
+  if (arg.startsWith('--')) {
 
     final nameOption = arg.substring(2);
     final option = parser.options[nameOption];
-    if(option != null) {
+    if (option != null) {
       return option;
     }
   }
 
   // could be a 'not' arg name
-  if(arg.startsWith('--no-')) {
+  if (arg.startsWith('--no-')) {
     final nameOption = arg.substring(5);
     final option = parser.options[nameOption];
-    if(option != null && option.negatable) {
+    if (option != null && option.negatable) {
       return option;
     }
   }
 
-  if(arg.startsWith('-') && arg.length == 2) {
+  if (arg.startsWith('-') && arg.length == 2) {
     // all abbreviations are single-character
     final abbr = arg.substring(1);
     assert(abbr.length == 1);
@@ -350,11 +349,11 @@ Tuple<List<String>, ArgResults> _getValidSubset(ArgParser parser,
    */
   final validSubSet = providedArgs.toList();
   ArgResults subsetResult = null;
-  while(!validSubSet.isEmpty) {
+  while (!validSubSet.isEmpty) {
     try {
       subsetResult = parser.parse(validSubSet);
       break;
-    } on FormatException catch(ex, stack) {
+    } on FormatException catch (ex, stack) {
       //_log('tried to parse subset $validSubSet');
       //_log('error:\t$ex');
       // I guess that won't parse
@@ -373,7 +372,7 @@ List<String> _getArgsOptionCompletions(Option option) {
 
   items.add('--${option.name}');
 
-  if(option.negatable) {
+  if (option.negatable) {
     items.add('--no-${option.name}');
   }
 
@@ -383,11 +382,10 @@ List<String> _getArgsOptionCompletions(Option option) {
 }
 
 String _helpfulToString(Object input) {
-  if(input is Iterable) {
-    final items = input.map((item) => _helpfulToString(item))
-        .toList();
+  if (input is Iterable) {
+    final items = input.map((item) => _helpfulToString(item)).toList();
 
-    if(items.isEmpty) {
+    if (items.isEmpty) {
       return '-empty-';
     } else {
       return "[${items.join(', ')}]";
@@ -407,7 +405,7 @@ void _log(Object o, [List<String> subContexts]) {
   }
 
   final startArgs = ['completion'];
-  if(subContexts != null) {
+  if (subContexts != null) {
     startArgs.addAll(subContexts);
   }
 

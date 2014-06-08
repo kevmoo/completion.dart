@@ -1,5 +1,4 @@
 #!/usr/bin/env dart --checked
-
 library completion.sample;
 
 import 'dart:io';
@@ -37,20 +36,20 @@ void main(List<String> args) {
   }
 
 
-  if(argResult.command != null) {
+  if (argResult.command != null) {
     final subCommand = argResult.command;
     final subCommandParser = argParser.commands[subCommand.name];
 
-    if(subCommand.name == 'help') {
+    if (subCommand.name == 'help') {
       // so the help command was run.
 
       // there are args here, too. Super fun.
-      if(subCommand.command != null) {
+      if (subCommand.command != null) {
         // we have a sub-sub command. Fun!
         // let's get the sub-sub command parser
 
         final subSubCommand = subCommand.command;
-        if(subSubCommand.name == 'assistance') {
+        if (subSubCommand.name == 'assistance') {
           print("Yes, we have help for help...just calling it assistance");
           // let's print sub help. Very crazy.
           print(subCommandParser.getUsage());
@@ -63,7 +62,7 @@ void main(List<String> args) {
 
       var usage = argParser.getUsage();
 
-      if(subCommand['yell']) {
+      if (subCommand['yell']) {
         usage = usage.toUpperCase();
         print("I'm yelling, so the case of the available commands will be off");
       }
@@ -82,7 +81,7 @@ void main(List<String> args) {
 
   var message = '$greeting, ${salutation}${name}';
 
-  if(argResult['loud']) {
+  if (argResult['loud']) {
     message = message.toUpperCase();
   }
 

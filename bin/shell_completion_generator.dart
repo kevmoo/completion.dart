@@ -1,5 +1,4 @@
 #!/usr/bin/env dart
-
 import 'dart:io';
 import 'package:bot/bot.dart';
 import 'package:path/path.dart' as pathos;
@@ -43,16 +42,16 @@ void execute(List<String> arguments) {
   var scriptPath = Platform.script.toFilePath();
   scriptPath = pathos.absolute(pathos.normalize(scriptPath));
 
-  if(scriptPath.isEmpty) {
+  if (scriptPath.isEmpty) {
     throw new ArgumentError('no script path provided');
   }
 
-  if(arguments.isEmpty) {
+  if (arguments.isEmpty) {
     throw new ArgumentError('Provide the name of at least of one command');
   }
 
-  for(final binName in arguments) {
-    if(!_binNameMatch.hasMatch(binName)) {
+  for (final binName in arguments) {
+    if (!_binNameMatch.hasMatch(binName)) {
       final msg = 'The provided name - "$binName" - is invalid\n'
           'It must match regex: ${_binNameMatch.pattern}';
       throw msg;
@@ -61,19 +60,18 @@ void execute(List<String> arguments) {
 
   binNames.addAll(arguments);
 
-  final prefix = Util.splitLines(_PREFIX)
-      .map((l) => '# $l'.trim())
-      .join('\n');
+  final prefix = Util.splitLines(_PREFIX).map((l) => '# $l'.trim()).join('\n');
   print(prefix);
 
   // empty line
   print('');
 
-  for(final binName in binNames) {
+  for (final binName in binNames) {
     _printBinName(binName);
   }
 
-  final detailLines = ['Generated ${new DateTime.now().toUtc()}', 'By ${scriptPath}'];
+  final detailLines = ['Generated ${new DateTime.now().toUtc()}',
+      'By ${scriptPath}'];
 
   final details = detailLines.map((l) => '## $l').join('\n');
   print(details);
@@ -87,7 +85,8 @@ void _printBinName(String binName) {
 
   var funcName = binName.replaceAll('.', '_');
   funcName = '__${funcName}_completion';
-  templateContents = templateContents.replaceAll(_FUNC_NAME_REPLACEMENT, funcName);
+  templateContents = templateContents.replaceAll(_FUNC_NAME_REPLACEMENT,
+      funcName);
 
   print(templateContents);
 }
