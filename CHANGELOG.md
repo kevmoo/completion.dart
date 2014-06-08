@@ -1,3 +1,9 @@
+## 0.1.2+2
+
+* Stopped using deprecated features from `bot` package.
+
+* Formatting
+
 ## 0.1.2+1
 
  * Updated `hop` and added `hop_unittest` dev dependencies.
