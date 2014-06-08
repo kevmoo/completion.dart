@@ -1,6 +1,8 @@
 library completion;
 
+import 'dart:collection';
 import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
 import 'package:logging/logging.dart' as logging;
@@ -136,13 +138,14 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
 
   // a set of options in use (minus, potentially, the last one)
   // all non-null, all unique
-  final optionsDefinedInArgs = alignedArgsOptions.take(alignedArgsOptions.length - 1)
+  var optionsDefinedInArgs = alignedArgsOptions.take(alignedArgsOptions.length - 1)
       .where((o) => o != null)
       .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
-  final parserOptionCompletions = $(_getParserOptionCompletions(parser, optionsDefinedInArgs))
-      .toReadOnlyCollection();
+  var parserOptionCompletions =
+      new UnmodifiableListView(
+          _getParserOptionCompletions(parser, optionsDefinedInArgs).toList());
 
   /*
    * KNOWN: at least one item in providedArgs last and first are now safe
@@ -266,7 +269,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    */
   if(lastArg == '--') {
     sublog('Completing with all available options.');
-    return parserOptionCompletions.asList();
+    return parserOptionCompletions;
   }
 
   /*
