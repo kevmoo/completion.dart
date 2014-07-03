@@ -8,10 +8,11 @@ import 'package:bot/bot.dart';
 import 'package:logging/logging.dart' as logging;
 import 'package:path/path.dart' as p;
 
-/// The string 'completion' used to denote that arguments proivded to an app are for command
-/// completion.
+/// The string 'completion' used to denote that arguments proivded to an app are
+/// for command completion.
 ///
-/// The expected arg format is: completion -- {process name} {rest of current args}
+/// The expected arg format is: completion -- {process name} {rest of current
+/// args}
 const String COMPLETION_COMMAND_NAME = 'completion';
 
 const _COMP_POINT_VAR = 'COMP_POINT';
@@ -20,8 +21,7 @@ typedef List<String> ArgCompleter(List<String> args, String compLine,
     int compPoint);
 
 void tryCompletion(List<String> args, ArgCompleter completer) {
-
-  final scriptName = p.basename(Platform.script.toFilePath());
+  var scriptName = p.basename(Platform.script.toFilePath());
   if (scriptName.isEmpty) {
     // should have a script name...weird...
     return;
@@ -48,7 +48,8 @@ void tryCompletion(List<String> args, ArgCompleter completer) {
       require(compPointValue != null && !compPointValue.isEmpty,
           'Environment variable $_COMP_POINT_VAR must be set and non-empty');
       final compPoint = int.parse(compPointValue, onError: (val) {
-        throw new FormatException('Could not parse $_COMP_POINT_VAR value "$val" into an integer');
+        throw new FormatException('Could not parse $_COMP_POINT_VAR value '
+            '"$val" into an integer');
       });
 
       final trimmedArgs = args.sublist(3);
@@ -131,13 +132,14 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    * Soooo....we are excluding the last item in [alignedArgsOptions] from
    * optionsDefinedInArgs
    *
-   * Keep in mind, if we're already on to the next item to complete, the last item is likely
-   * empty string '' or '--', so this isn't a problem
+   * Keep in mind, if we're already on to the next item to complete, the last
+   * item is likely empty string '' or '--', so this isn't a problem
    */
 
   // a set of options in use (minus, potentially, the last one)
   // all non-null, all unique
-  var optionsDefinedInArgs = alignedArgsOptions.take(alignedArgsOptions.length - 1)
+  var optionsDefinedInArgs = alignedArgsOptions
+      .take(alignedArgsOptions.length - 1)
       .where((o) => o != null)
       .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
@@ -172,7 +174,8 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
     final subCommand = subsetResult.command;
     final subCommandIndex = providedArgs.indexOf(subCommand.name);
     assert(subCommandIndex >= 0);
-    sublog('so, it seems we have command "${subCommand.name}" at index $subCommandIndex');
+    sublog('so, it seems we have command "${subCommand.name}" at '
+        'index $subCommandIndex');
 
     final subCommandParser = parser.commands[subCommand.name];
     final subCommandArgs = providedArgs.sublist(subCommandIndex + 1);
@@ -184,7 +187,8 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
      */
 
     if(!subCommandArgs.isEmpty || compLine.endsWith(' ')) {
-      return getArgsCompletions(subCommandParser, subCommandArgs, compLine, compPoint);
+      return getArgsCompletions(subCommandParser, subCommandArgs, compLine,
+          compPoint);
     }
   }
 
@@ -252,7 +256,8 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   }
 
   /*
-   * CASE: no removed items and compLine ends in a space -> do command completion
+   * CASE: no removed items and compLine ends in a space ->
+   * do command completion
    */
   if (removedItems.isEmpty && lastArg == '') {
 
@@ -329,8 +334,10 @@ Option _getOptionForArg(ArgParser parser, String arg) {
   return null;
 }
 
-Iterable<String> _getParserOptionCompletions(ArgParser parser, Set<Option> existingOptions) {
-  assert(existingOptions.every((option) => parser.options.containsValue(option)));
+Iterable<String> _getParserOptionCompletions(ArgParser parser,
+    Set<Option> existingOptions) {
+  assert(existingOptions.every((option) =>
+      parser.options.containsValue(option)));
 
   return parser.options.values
       .where((Option o) => !existingOptions.contains(o) || o.allowMultiple)
@@ -340,7 +347,9 @@ Iterable<String> _getParserOptionCompletions(ArgParser parser, Set<Option> exist
 Tuple<List<String>, ArgResults> _getValidSubset(ArgParser parser,
     List<String> providedArgs) {
 
-  /* start with all of the args, loop through parsing them, removing one every time
+  /* start with all of the args, loop through parsing them,
+   * removing one every time
+   *
    * Util:
    * 1) we have a valid ArgsResult
    * 2) we have no more args
@@ -399,7 +408,8 @@ void _log(Object o, [List<String> subContexts]) {
   try {
     safe = o.toString();
   } catch (e, stack) {
-    safe = 'Error converting provided object $o into String\nException:\t$e\Stack:\t$stack';
+    safe = 'Error converting provided object $o into '
+        'String\nException:\t$e\Stack:\t$stack';
   }
 
   final startArgs = ['completion'];
