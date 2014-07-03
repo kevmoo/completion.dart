@@ -8,12 +8,10 @@ import 'package:bot/bot.dart';
 import 'package:logging/logging.dart' as logging;
 import 'package:path/path.dart' as p;
 
-/**
- * The string 'completion' used to denote that arguments proivded to an app are for command
- * completion.
- *
- * The expected arg format is: completion -- {process name} {rest of current args}
- */
+/// The string 'completion' used to denote that arguments proivded to an app are for command
+/// completion.
+///
+/// The expected arg format is: completion -- {process name} {rest of current args}
 const String COMPLETION_COMMAND_NAME = 'completion';
 
 const _COMP_POINT_VAR = 'COMP_POINT';
