@@ -1,3 +1,7 @@
+## 0.1.2+5
+
+* Fix for latest `args` version.
+
 ## 0.1.2+4
 
 * Allow latest `args` version.
