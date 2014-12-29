@@ -30,7 +30,7 @@ void main(List<String> args) {
   } on FormatException catch (ex, stack) {
     // TODO: print color?
     print(ex.message);
-    print(argParser.getUsage());
+    print(argParser.usage);
     /// 64 - C/C++ standard for bad usage.
     exit(64);
   }
@@ -52,7 +52,7 @@ void main(List<String> args) {
         if (subSubCommand.name == 'assistance') {
           print("Yes, we have help for help...just calling it assistance");
           // let's print sub help. Very crazy.
-          print(subCommandParser.getUsage());
+          print(subCommandParser.usage);
           exit(0);
         } else {
           throw 'no clue what that subCammand is: ${subSubCommand.name}';
@@ -60,7 +60,7 @@ void main(List<String> args) {
       }
       // one sub-sub command: help. Really.
 
-      var usage = argParser.getUsage();
+      var usage = argParser.usage;
 
       if (subCommand['yell']) {
         usage = usage.toUpperCase();
