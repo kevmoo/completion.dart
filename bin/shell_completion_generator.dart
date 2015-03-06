@@ -35,7 +35,6 @@ void main(List<String> arguments) {
 }
 
 void execute(List<String> arguments) {
-
   final binNames = new List<String>();
   File templateFile;
 
@@ -70,8 +69,10 @@ void execute(List<String> arguments) {
     _printBinName(binName);
   }
 
-  final detailLines = ['Generated ${new DateTime.now().toUtc()}',
-      'By ${scriptPath}'];
+  final detailLines = [
+    'Generated ${new DateTime.now().toUtc()}',
+    'By ${scriptPath}'
+  ];
 
   final details = detailLines.map((l) => '## $l').join('\n');
   print(details);
@@ -85,8 +86,8 @@ void _printBinName(String binName) {
 
   var funcName = binName.replaceAll('.', '_');
   funcName = '__${funcName}_completion';
-  templateContents = templateContents.replaceAll(_FUNC_NAME_REPLACEMENT,
-      funcName);
+  templateContents =
+      templateContents.replaceAll(_FUNC_NAME_REPLACEMENT, funcName);
 
   print(templateContents);
 }

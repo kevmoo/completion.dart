@@ -35,7 +35,6 @@ void main(List<String> args) {
     exit(64);
   }
 
-
   if (argResult.command != null) {
     final subCommand = argResult.command;
     final subCommandParser = argParser.commands[subCommand.name];
