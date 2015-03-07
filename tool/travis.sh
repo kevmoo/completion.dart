@@ -3,7 +3,7 @@
 # Fast fail the script on failures.   
 set -e
 
-dart --checked test/test_all.dart
+dart --checked test/completion_test.dart
 
 # Install dart_coveralls; gather and send coverage data.
 if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
@@ -11,5 +11,5 @@ if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
     --token $COVERALLS_TOKEN \
     --retry 2 \
     --exclude-test-files \
-    test/test_all.dart
+    test/completion_test.dart
 fi
