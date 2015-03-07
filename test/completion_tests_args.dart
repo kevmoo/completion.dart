@@ -31,7 +31,7 @@ ArgParser getHelloSampleParser() {
       negatable: true,
       defaultsTo: false);
 
-  final helpHelpParser = helpParser.addCommand('assistance');
+  helpParser.addCommand('assistance');
 
   return parser;
 }

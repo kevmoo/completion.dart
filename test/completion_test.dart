@@ -2,7 +2,6 @@ library completion.test;
 
 import 'package:args/args.dart';
 import 'package:completion/completion.dart';
-import 'package:logging/logging.dart';
 import 'package:unittest/unittest.dart';
 
 import 'completion_tests_args.dart';
@@ -159,11 +158,6 @@ void _testCompletionPair(ArgParser parser, List<String> args,
 
   expect(completions, unorderedEquals(suggestions),
       reason: 'for args: ${args} expected: ${suggestions} but got: $completions');
-}
-
-void _doLog(LogRecord record) {
-  final msg = '${record.loggerName}\t${record.time}\t${record.message}';
-  logMessage(msg);
 }
 
 class _CompletionSet {

@@ -352,7 +352,7 @@ Tuple<List<String>, ArgResults> _getValidSubset(
     try {
       subsetResult = parser.parse(validSubSet);
       break;
-    } on FormatException catch (ex, stack) {
+    } on FormatException catch (ex) {
       //_log('tried to parse subset $validSubSet');
       //_log('error:\t$ex');
       // I guess that won't parse

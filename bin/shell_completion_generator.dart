@@ -36,7 +36,6 @@ void main(List<String> arguments) {
 
 void execute(List<String> arguments) {
   final binNames = new List<String>();
-  File templateFile;
 
   var scriptPath = Platform.script.toFilePath();
   scriptPath = pathos.absolute(pathos.normalize(scriptPath));

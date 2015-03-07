@@ -27,7 +27,7 @@ void main(List<String> args) {
 
   try {
     argResult = tryArgsCompletion(args, argParser);
-  } on FormatException catch (ex, stack) {
+  } on FormatException catch (ex) {
     // TODO: print color?
     print(ex.message);
     print(argParser.usage);
