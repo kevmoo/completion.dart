@@ -6,8 +6,8 @@ ArgParser getHelloSampleParser() {
   final parser = new ArgParser();
 
   // not negatable
-  parser.addFlag(
-      'friendly', abbr: 'f', negatable: false, help: 'should I be friendly?');
+  parser.addFlag('friendly',
+      abbr: 'f', negatable: false, help: 'should I be friendly?');
 
   // negatable
   parser.addFlag('loud', help: 'should I be loud in how I say hello?');

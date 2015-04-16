@@ -14,20 +14,18 @@ void main() {
       final allOptions = _getAllOptions(parser);
 
       final pairs = [
-        new _CompletionSet('empty input, just give all the commands',
-            [], parser.commands.keys.toList()),
+        new _CompletionSet('empty input, just give all the commands', [],
+            parser.commands.keys.toList()),
         new _CompletionSet('just a dash: should be empty. Vague', ['-'], []),
         new _CompletionSet(
             'double-dash, give all the options', ['--'], allOptions),
         new _CompletionSet(
             '+flag complete --frie to --friendly', ['--frie'], ['--friendly']),
-        new _CompletionSet('+flag complete full, final option to itself', [
-          '--friendly'
-        ], ['--friendly']),
+        new _CompletionSet('+flag complete full, final option to itself',
+            ['--friendly'], ['--friendly']),
         new _CompletionSet(
-            "+command starting to complete 'help' - finish with help", ['he'], [
-          'help'
-        ]),
+            "+command starting to complete 'help' - finish with help", ['he'],
+            ['help']),
         new _CompletionSet(
             "+command all of 'help' - finish with help", ['help'], ['help']),
         new _CompletionSet("too much", ['helpp'], []),
