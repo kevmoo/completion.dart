@@ -8,7 +8,7 @@ import 'package:bot/bot.dart';
 import 'package:logging/logging.dart' as logging;
 import 'package:path/path.dart' as p;
 
-/// The string 'completion' used to denote that arguments proivded to an app are
+/// The string 'completion' used to denote that arguments provided to an app are
 /// for command completion.
 ///
 /// The expected arg format is: completion -- {process name} {rest of current
