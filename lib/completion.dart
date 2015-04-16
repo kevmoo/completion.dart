@@ -21,7 +21,15 @@ typedef List<String> ArgCompleter(
     List<String> args, String compLine, int compPoint);
 
 void tryCompletion(List<String> args, ArgCompleter completer) {
-  var scriptName = p.basename(Platform.script.toFilePath());
+  String scriptName;
+  try {
+    scriptName = p.basename(Platform.script.toFilePath());
+  } on UnsupportedError catch (e, stack) {
+    _log(e);
+    _log(stack);
+    return;
+  }
+
   if (scriptName.isEmpty) {
     // should have a script name...weird...
     return;

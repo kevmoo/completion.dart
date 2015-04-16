@@ -1,3 +1,7 @@
+## 0.1.4
+
+* Don't blow up if run via `pub run`.
+
 ## 0.1.2+5
 
 * Fix for latest `args` version.
