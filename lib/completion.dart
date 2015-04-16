@@ -360,7 +360,7 @@ Tuple<List<String>, ArgResults> _getValidSubset(
     try {
       subsetResult = parser.parse(validSubSet);
       break;
-    } on FormatException catch (ex) {
+    } on FormatException catch (_) {
       //_log('tried to parse subset $validSubSet');
       //_log('error:\t$ex');
       // I guess that won't parse
