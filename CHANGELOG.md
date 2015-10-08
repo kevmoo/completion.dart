@@ -1,3 +1,7 @@
+## 0.1.5
+
+* Support the latest version of `logging`.
+
 ## 0.1.4
 
 * Don't blow up if run via `pub run`.
