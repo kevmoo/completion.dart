@@ -31,6 +31,7 @@ void main(List<String> args) {
     // TODO: print color?
     print(ex.message);
     print(argParser.usage);
+
     /// 64 - C/C++ standard for bad usage.
     exit(64);
   }
