@@ -2,7 +2,7 @@ library completion.test;
 
 import 'package:args/args.dart';
 import 'package:completion/completion.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'completion_tests_args.dart';
 
@@ -122,7 +122,9 @@ List<String> _getAllOptions(ArgParser parser) {
   final list = new List<String>();
 
   parser.options.forEach((k, v) {
-    expect(k, v.name);
+    if (k != v.name) {
+      throw "Boo!";
+    }
 
     list.add(_optionIze(k));
 
@@ -139,8 +141,6 @@ String _optionIze(String input) => '--$input';
 void _testCompletionPair(ArgParser parser, List<String> args,
     List<String> suggestions, String compLine, int compPoint) {
   final completions = getArgsCompletions(parser, args, compLine, compPoint);
-
-  logMessage('completed with $completions');
 
   expect(completions, unorderedEquals(suggestions),
       reason:
