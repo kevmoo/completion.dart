@@ -1,5 +1,5 @@
-#!/usr/bin/env dart
 import 'dart:io';
+
 import 'package:bot/bot.dart';
 import 'package:path/path.dart' as pathos;
 
@@ -37,13 +37,6 @@ void main(List<String> arguments) {
 void execute(List<String> arguments) {
   final binNames = new List<String>();
 
-  var scriptPath = Platform.script.toFilePath();
-  scriptPath = pathos.absolute(pathos.normalize(scriptPath));
-
-  if (scriptPath.isEmpty) {
-    throw new ArgumentError('no script path provided');
-  }
-
   if (arguments.isEmpty) {
     throw new ArgumentError('Provide the name of at least of one command');
   }
@@ -68,10 +61,14 @@ void execute(List<String> arguments) {
     _printBinName(binName);
   }
 
-  final detailLines = [
-    'Generated ${new DateTime.now().toUtc()}',
-    'By ${scriptPath}'
-  ];
+  final detailLines = ['Generated ${new DateTime.now().toUtc()}',];
+
+  if (Platform.script.scheme == 'file') {
+    var scriptPath = Platform.script.toFilePath();
+    scriptPath = pathos.absolute(pathos.normalize(scriptPath));
+
+    detailLines.add('By ${scriptPath}');
+  }
 
   final details = detailLines.map((l) => '## $l').join('\n');
   print(details);
