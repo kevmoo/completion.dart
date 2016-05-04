@@ -27,21 +27,21 @@ final _binNameMatch = new RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
 
 void main(List<String> arguments) {
   try {
-    execute(arguments);
+    print(generateCompletionScript(arguments));
   } catch (e) {
     print(e);
     exit(1);
   }
 }
 
-void execute(List<String> arguments) {
+String generateCompletionScript(List<String> binaryNames) {
   final binNames = new List<String>();
 
-  if (arguments.isEmpty) {
+  if (binaryNames.isEmpty) {
     throw new ArgumentError('Provide the name of at least of one command');
   }
 
-  for (final binName in arguments) {
+  for (final binName in binaryNames) {
     if (!_binNameMatch.hasMatch(binName)) {
       final msg = 'The provided name - "$binName" - is invalid\n'
           'It must match regex: ${_binNameMatch.pattern}';
@@ -49,16 +49,18 @@ void execute(List<String> arguments) {
     }
   }
 
-  binNames.addAll(arguments);
+  binNames.addAll(binaryNames);
+
+  var buffer = new StringBuffer();
 
   final prefix = Util.splitLines(_PREFIX).map((l) => '# $l'.trim()).join('\n');
-  print(prefix);
+  buffer.writeln(prefix);
 
   // empty line
-  print('');
+  buffer.writeln('');
 
   for (final binName in binNames) {
-    _printBinName(binName);
+    buffer.writeln(_printBinName(binName));
   }
 
   final detailLines = ['Generated ${new DateTime.now().toUtc()}',];
@@ -71,13 +73,12 @@ void execute(List<String> arguments) {
   }
 
   final details = detailLines.map((l) => '## $l').join('\n');
-  print(details);
+  buffer.writeln(details);
 
-  // and a final newline
-  print('');
+  return buffer.toString();
 }
 
-void _printBinName(String binName) {
+String _printBinName(String binName) {
   var templateContents = _TEMPLATE.replaceAll(_BIN_NAME_REPLACEMENT, binName);
 
   var funcName = binName.replaceAll('.', '_');
@@ -85,7 +86,7 @@ void _printBinName(String binName) {
   templateContents =
       templateContents.replaceAll(_FUNC_NAME_REPLACEMENT, funcName);
 
-  print(templateContents);
+  return templateContents;
 }
 
 const _PREFIX = '''
