@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:bot/bot.dart';
 import 'package:path/path.dart' as pathos;
 
 const _BIN_NAME_REPLACEMENT = '{{binName}}';
@@ -26,8 +26,6 @@ final _binNameMatch = new RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
  */
 
 String generateCompletionScript(List<String> binaryNames) {
-  final binNames = new List<String>();
-
   if (binaryNames.isEmpty) {
     throw new ArgumentError('Provide the name of at least of one command');
   }
@@ -40,17 +38,16 @@ String generateCompletionScript(List<String> binaryNames) {
     }
   }
 
-  binNames.addAll(binaryNames);
-
   var buffer = new StringBuffer();
 
-  final prefix = Util.splitLines(_PREFIX).map((l) => '# $l'.trim()).join('\n');
+  final prefix =
+      LineSplitter.split(_PREFIX).map((l) => '# $l'.trim()).join('\n');
   buffer.writeln(prefix);
 
   // empty line
   buffer.writeln('');
 
-  for (final binName in binNames) {
+  for (final binName in binaryNames) {
     buffer.writeln(_printBinName(binName));
   }
 
