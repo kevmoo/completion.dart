@@ -111,9 +111,9 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
     }
   }
 
-  final sublog = (Object obj) {
+  void sublog(Object obj) {
     _log(obj, ['getArgsCompletions']);
-  };
+  }
 
   sublog("provided args: ${_helpfulToString(providedArgs)}");
   sublog('COMP_LINE:  "$compLine"');
@@ -122,7 +122,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   if (compPoint < compLine.length) {
     // TODO: ponder smart ways to handle in-line completion
     sublog('cursor is in the middle of the line. NO-OP');
-    return [];
+    return const [];
   }
 
   if (providedArgs.isEmpty) {
@@ -251,7 +251,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
             .toList();
       } else if (!option.isFlag) {
         sublog("not providing completions. Wating for option value");
-        return [];
+        return const [];
       }
     }
   }
@@ -299,7 +299,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
 
   sublog("Exhausted options. No suggestions.");
 
-  return [];
+  return const [];
 }
 
 Option _getOptionForArg(ArgParser parser, String arg) {
