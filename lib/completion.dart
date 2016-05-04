@@ -1,6 +1,3 @@
-library completion;
-
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -152,8 +149,8 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
       .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
-  var parserOptionCompletions = new UnmodifiableListView(
-      _getParserOptionCompletions(parser, optionsDefinedInArgs).toList());
+  var parserOptionCompletions = new List<String>.unmodifiable(
+      _getParserOptionCompletions(parser, optionsDefinedInArgs));
 
   /*
    * KNOWN: at least one item in providedArgs last and first are now safe
