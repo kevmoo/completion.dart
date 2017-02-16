@@ -20,7 +20,8 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
     require(arg.trim() == arg, '$msg has whitespace');
 
     if (i < (providedArgs.length - 1)) {
-      require(!arg.isEmpty, '$msg – Only the last arg can be an empty string');
+      require(
+          arg.isNotEmpty, '$msg – Only the last arg can be an empty string');
     }
   }
 
@@ -106,7 +107,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
      * 2) there's whitespace at the end of compLine
      */
 
-    if (!subCommandArgs.isEmpty || compLine.endsWith(' ')) {
+    if (subCommandArgs.isNotEmpty || compLine.endsWith(' ')) {
       return getArgsCompletions(
           subCommandParser, subCommandArgs, compLine, compPoint);
     }
@@ -130,7 +131,9 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
       // if the removed item maps to an option w/ allowed values
       // we should return those values to complete against
       final option = alignedArgsOptions[providedArgs.length - 1];
-      if (option != null && option.allowed != null && !option.allowed.isEmpty) {
+      if (option != null &&
+          option.allowed != null &&
+          option.allowed.isNotEmpty) {
         assert(!option.isFlag);
 
         sublog('completing all allowed value for option "${option.name}"');
@@ -153,7 +156,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   if (providedArgs.length >= 2) {
     final option = alignedArgsOptions[providedArgs.length - 2];
     if (option != null) {
-      if (option.allowed != null && !option.allowed.isEmpty) {
+      if (option.allowed != null && option.allowed.isNotEmpty) {
         assert(!option.isFlag);
         sublog('completing option "${option.name}"');
 
@@ -266,8 +269,8 @@ Tuple<List<String>, ArgResults> _getValidSubset(
    * 2) we have no more args
    */
   final validSubSet = providedArgs.toList();
-  ArgResults subsetResult = null;
-  while (!validSubSet.isEmpty) {
+  ArgResults subsetResult;
+  while (validSubSet.isNotEmpty) {
     try {
       subsetResult = parser.parse(validSubSet);
       break;
