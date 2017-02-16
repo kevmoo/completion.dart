@@ -16,7 +16,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   for (int i = 0; i < providedArgs.length; i++) {
     final arg = providedArgs[i];
     final msg = 'Arg at index $i with value "$arg" ';
-    require(arg != null, '$msg is null');
+    requireArgumentNotNull(arg, '$msg is null');
     require(arg.trim() == arg, '$msg has whitespace');
 
     if (i < (providedArgs.length - 1)) {
