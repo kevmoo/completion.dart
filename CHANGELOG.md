@@ -1,3 +1,7 @@
+## 0.1.6
+
+* A bunch of internal cleanup.
+
 ## 0.1.5
 
 * Support the latest version of `logging`.
