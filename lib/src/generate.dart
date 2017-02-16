@@ -51,7 +51,9 @@ String generateCompletionScript(List<String> binaryNames) {
     buffer.writeln(_printBinName(binName));
   }
 
-  final detailLines = ['Generated ${new DateTime.now().toUtc()}',];
+  final detailLines = [
+    'Generated ${new DateTime.now().toUtc()}',
+  ];
 
   if (Platform.script.scheme == 'file') {
     var scriptPath = Platform.script.toFilePath();
