@@ -31,9 +31,7 @@ void tryCompletion(List<String> args,
   }
 
   log('Checking for completion on script:\t$scriptName');
-  if (args.length >= 3 &&
-      args[0] == completionCommandName &&
-      args[1] == '--') {
+  if (args.length >= 3 && args[0] == completionCommandName && args[1] == '--') {
     try {
       log('Starting completion');
       log('completion-reported exe: ${args[2]}');

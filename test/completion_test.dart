@@ -143,8 +143,7 @@ void _testCompletionPair(ArgParser parser, List<String> args,
   final completions = getArgsCompletions(parser, args, compLine, compPoint);
 
   expect(completions, unorderedEquals(suggestions),
-      reason:
-          'for args: $args expected: $suggestions but got: $completions');
+      reason: 'for args: $args expected: $suggestions but got: $completions');
 }
 
 class _CompletionSet {
