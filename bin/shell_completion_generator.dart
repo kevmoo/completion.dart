@@ -7,6 +7,6 @@ void main(List<String> arguments) {
     print(generateCompletionScript(arguments));
   } catch (e) {
     print(e);
-    exit(1);
+    exitCode = 1;
   }
 }

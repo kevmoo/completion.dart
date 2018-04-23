@@ -68,12 +68,11 @@ void tryCompletion(List<String> args,
       for (final comp in completions) {
         print(comp);
       }
-      exit(0);
     } catch (ex, stack) {
       log('An error occurred while attemping completion');
       log(ex);
       log(stack);
-      exit(1);
+      exitCode = 1;
     }
   }
 

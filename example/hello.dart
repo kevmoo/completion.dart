@@ -33,7 +33,8 @@ void main(List<String> args) {
     print(argParser.usage);
 
     /// 64 - C/C++ standard for bad usage.
-    exit(64);
+    exitCode = 64;
+    return;
   }
 
   if (argResult.command != null) {
@@ -53,9 +54,10 @@ void main(List<String> args) {
           print('Yes, we have help for help...just calling it assistance');
           // let's print sub help. Very crazy.
           print(subCommandParser.usage);
-          exit(0);
+          return;
         } else {
-          throw new StateError('no clue what that subCammand is: ${subSubCommand.name}');
+          throw new StateError(
+              'no clue what that subCammand is: ${subSubCommand.name}');
         }
       }
       // one sub-sub command: help. Really.
@@ -68,7 +70,7 @@ void main(List<String> args) {
       }
 
       print(usage);
-      exit(0);
+      return;
     }
   }
 
