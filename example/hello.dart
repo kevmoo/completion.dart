@@ -1,6 +1,4 @@
 #!/usr/bin/env dart --checked
-library completion.sample;
-
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:completion/completion.dart';

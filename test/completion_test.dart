@@ -1,5 +1,3 @@
-library completion.test;
-
 import 'package:args/args.dart';
 import 'package:completion/src/get_args_completions.dart';
 import 'package:test/test.dart';

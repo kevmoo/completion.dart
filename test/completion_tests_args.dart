@@ -1,5 +1,3 @@
-library completion.test_args;
-
 import 'package:args/args.dart';
 
 ArgParser getHelloSampleParser() {
