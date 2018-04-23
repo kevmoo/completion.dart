@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:path/path.dart' as pathos;
 
-const _BIN_NAME_REPLACEMENT = '{{binName}}';
-const _FUNC_NAME_REPLACEMENT = '{{funcName}}';
+const _binNameReplacement = '{{binName}}';
+const _funcNameReplacement = '{{funcName}}';
 
 /*
  * Must be at least one char.
@@ -33,14 +33,14 @@ String generateCompletionScript(List<String> binaryNames) {
     if (!_binNameMatch.hasMatch(binName)) {
       final msg = 'The provided name - "$binName" - is invalid\n'
           'It must match regex: ${_binNameMatch.pattern}';
-      throw msg;
+      throw new StateError(msg);
     }
   }
 
   var buffer = new StringBuffer();
 
   final prefix =
-      LineSplitter.split(_PREFIX).map((l) => '# $l'.trim()).join('\n');
+      LineSplitter.split(_prefix).map((l) => '# $l'.trim()).join('\n');
   buffer.writeln(prefix);
 
   // empty line
@@ -58,7 +58,7 @@ String generateCompletionScript(List<String> binaryNames) {
     var scriptPath = Platform.script.toFilePath();
     scriptPath = pathos.absolute(pathos.normalize(scriptPath));
 
-    detailLines.add('By ${scriptPath}');
+    detailLines.add('By $scriptPath');
   }
 
   final details = detailLines.map((l) => '## $l').join('\n');
@@ -68,17 +68,17 @@ String generateCompletionScript(List<String> binaryNames) {
 }
 
 String _printBinName(String binName) {
-  var templateContents = _TEMPLATE.replaceAll(_BIN_NAME_REPLACEMENT, binName);
+  var templateContents = _template.replaceAll(_binNameReplacement, binName);
 
   var funcName = binName.replaceAll('.', '_');
   funcName = '__${funcName}_completion';
   templateContents =
-      templateContents.replaceAll(_FUNC_NAME_REPLACEMENT, funcName);
+      templateContents.replaceAll(_funcNameReplacement, funcName);
 
   return templateContents;
 }
 
-const _PREFIX = '''
+const _prefix = '''
 
 Installation:
 
@@ -93,7 +93,7 @@ You may also have a directory on your system that is configured
    /usr/local/etc/bash_completion.d/
 ''';
 
-const _TEMPLATE = r'''
+const _template = r'''
 ###-begin-{{binName}}-completion-###
 
 if type complete &>/dev/null; then

@@ -29,7 +29,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
     log(obj, ['getArgsCompletions']);
   }
 
-  sublog("provided args: ${helpfulToString(providedArgs)}");
+  sublog('provided args: ${helpfulToString(providedArgs)}');
   sublog('COMP_LINE:  "$compLine"');
   sublog('COMP_POINT:  $compPoint');
 
@@ -166,7 +166,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
             .where((String v) => v.startsWith(optionValue))
             .toList();
       } else if (!option.isFlag) {
-        sublog("not providing completions. Wating for option value");
+        sublog('not providing completions. Wating for option value');
         return const [];
       }
     }
@@ -213,7 +213,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
     return [lastArg];
   }
 
-  sublog("Exhausted options. No suggestions.");
+  sublog('Exhausted options. No suggestions.');
 
   return const [];
 }

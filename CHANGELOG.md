@@ -1,6 +1,6 @@
 ## 0.2.0
 
-
+* Renamed `COMPLETION_COMMAND_NAME` to `completionCommandName`.
 
 ## 0.1.6
 

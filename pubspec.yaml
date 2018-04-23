@@ -3,13 +3,17 @@ version: 0.2.0-dev
 author: Kevin Moore <github@j832.com>
 description: A packaged to add shell command completion to your Dart application
 homepage: https://github.com/kevmoo/completion.dart
+
 environment:
   sdk: '>=2.0.0-dev.48.0 <2.0.0'
+
 dependencies:
   args: ^1.4.0
-  logging: '>=0.9.0 <0.12.0'
-  path: '>=1.0.0 <2.0.0'
+  logging: ^0.11.0
+  path: ^1.0.0
+
 dev_dependencies:
-  test: '>=0.12.0 <0.13.0'
+  test: ^0.12.0
+
 executables:
   shell_completion_generator: null

@@ -24,7 +24,7 @@ void log(Object o, [List<String> subContexts]) {
 
 String helpfulToString(Object input) {
   if (input is Iterable) {
-    final items = input.map((item) => helpfulToString(item)).toList();
+    final items = input.map(helpfulToString).toList();
 
     if (items.isEmpty) {
       return '-empty-';

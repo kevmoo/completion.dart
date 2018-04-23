@@ -28,15 +28,15 @@ void main() {
           ['help']),
       new _CompletionSet(
           "+command all of 'help' - finish with help", ['help'], ['help']),
-      new _CompletionSet("too much", ['helpp'], []),
-      new _CompletionSet("wrong case", ['Help'], []),
+      new _CompletionSet('too much', ['helpp'], []),
+      new _CompletionSet('wrong case', ['Help'], []),
       new _CompletionSet(
           "+command complete 'assistance'", ['help', 'assist'], ['assistance']),
-      new _CompletionSet("show the yell flag for help", ['help', '--'],
+      new _CompletionSet('show the yell flag for help', ['help', '--'],
           ['--yell', '--no-yell']),
       new _CompletionSet("+command help - complete '--n' to '--no-yell'",
           ['help', '--n'], ['--no-yell']),
-      new _CompletionSet("+command help has sub-command - assistance",
+      new _CompletionSet('+command help has sub-command - assistance',
           ['help', ''], ['assistance']),
       new _CompletionSet(
           "+flag don't offer --friendly twice",
@@ -77,23 +77,23 @@ void main() {
           ['-m', ''],
           []),
       new _CompletionSet(
-          "+option+allowed suggest completions for an option with allowed defined",
+          '+option+allowed suggest completions for an option with allowed defined',
           ['--salutation', ''],
           ['Mr', 'Mrs', 'Dr', 'Ms']),
       new _CompletionSet(
-          "+option+allowed finish a completion for an option (added via abbr) with allowed defined",
+          '+option+allowed finish a completion for an option (added via abbr) with allowed defined',
           ['-s', 'M'],
           ['Mr', 'Mrs', 'Ms']),
       new _CompletionSet("+abbr+option+allowed don't finish a bad completion",
           ['-s', 'W'], []),
       new _CompletionSet(
-          "+abbr+option+allowed confirm a completion", ['-s', 'Dr'], ['Dr']),
+          '+abbr+option+allowed confirm a completion', ['-s', 'Dr'], ['Dr']),
       new _CompletionSet(
-          "+abbr+option+allowed back to command completion after a completed option",
+          '+abbr+option+allowed back to command completion after a completed option',
           ['-s', 'Dr', ''],
           ['help']),
       new _CompletionSet(
-          "+abbr+option+allowed back to option completion after a completed option",
+          '+abbr+option+allowed back to option completion after a completed option',
           ['-s', 'Dr', '--'],
           ['--friendly', '--loud', '--no-loud', '--middle-name']),
     ];
@@ -106,7 +106,7 @@ void main() {
       _testCompletionPair(parser, args, [], compLine, compLine.length - 1);
     });
 
-    pairs.forEach((_CompletionSet p) {
+    for (var p in pairs) {
       final compLine = p.args.join(' ');
       final compPoint = compLine.length;
       final args = p.args.toList();
@@ -114,7 +114,7 @@ void main() {
       test(p.description, () {
         _testCompletionPair(parser, args, p.suggestions, compLine, compPoint);
       });
-    });
+    }
   });
 }
 
@@ -123,7 +123,7 @@ List<String> _getAllOptions(ArgParser parser) {
 
   parser.options.forEach((k, v) {
     if (k != v.name) {
-      throw "Boo!";
+      throw new StateError('Boo!');
     }
 
     list.add(_optionIze(k));
@@ -144,7 +144,7 @@ void _testCompletionPair(ArgParser parser, List<String> args,
 
   expect(completions, unorderedEquals(suggestions),
       reason:
-          'for args: ${args} expected: ${suggestions} but got: $completions');
+          'for args: $args expected: $suggestions but got: $completions');
 }
 
 class _CompletionSet {

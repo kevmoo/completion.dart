@@ -10,7 +10,7 @@ class Tuple<T1, T2> {
   }
 
   @override
-  String toString() => "{item1: $item1, item2: $item2}";
+  String toString() => '{item1: $item1, item2: $item2}';
 
   @override
   int get hashCode => Util.getHashCode([item1, item2]);
@@ -49,7 +49,7 @@ void requireArgumentNotNull(argument, String argName) {
 }
 
 void _metaRequireArgumentNotNullOrEmpty(String argName) {
-  if (argName == null || argName.length == 0) {
+  if (argName == null || argName.isEmpty) {
     throw new UnsupportedError("That's just sad. Give me a good argName");
   }
 }

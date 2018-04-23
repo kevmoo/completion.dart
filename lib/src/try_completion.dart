@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'bot.dart';
 import 'package:path/path.dart' as p;
 
+import 'bot.dart';
 import 'util.dart';
 
 /// The string 'completion' used to denote that arguments provided to an app are
@@ -10,9 +10,9 @@ import 'util.dart';
 ///
 /// The expected arg format is: completion -- {process name} {rest of current
 /// args}
-const String COMPLETION_COMMAND_NAME = 'completion';
+const String completionCommandName = 'completion';
 
-const _COMP_POINT_VAR = 'COMP_POINT';
+const _compPointVar = 'COMP_POINT';
 
 void tryCompletion(List<String> args,
     List<String> completer(List<String> args, String compLine, int compPoint)) {
@@ -32,7 +32,7 @@ void tryCompletion(List<String> args,
 
   log('Checking for completion on script:\t$scriptName');
   if (args.length >= 3 &&
-      args[0] == COMPLETION_COMMAND_NAME &&
+      args[0] == completionCommandName &&
       args[1] == '--') {
     try {
       log('Starting completion');
@@ -47,13 +47,13 @@ void tryCompletion(List<String> args,
 
       // COMP_CWORD: number of words. Also might be nice
       // COMP_POINT: where the cursor is on the completion line
-      final compPointValue = env[_COMP_POINT_VAR];
+      final compPointValue = env[_compPointVar];
       require(compPointValue != null && compPointValue.isNotEmpty,
-          'Environment variable $_COMP_POINT_VAR must be set and non-empty');
+          'Environment variable $_compPointVar must be set and non-empty');
       final compPoint = int.tryParse(compPointValue);
 
       if (compPoint == null) {
-        throw new FormatException('Could not parse $_COMP_POINT_VAR value '
+        throw new FormatException('Could not parse $_compPointVar value '
             '"$compPointValue" into an integer');
       }
 

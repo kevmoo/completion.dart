@@ -50,19 +50,19 @@ void main(List<String> args) {
 
         final subSubCommand = subCommand.command;
         if (subSubCommand.name == 'assistance') {
-          print("Yes, we have help for help...just calling it assistance");
+          print('Yes, we have help for help...just calling it assistance');
           // let's print sub help. Very crazy.
           print(subCommandParser.usage);
           exit(0);
         } else {
-          throw 'no clue what that subCammand is: ${subSubCommand.name}';
+          throw new StateError('no clue what that subCammand is: ${subSubCommand.name}');
         }
       }
       // one sub-sub command: help. Really.
 
       var usage = argParser.usage;
 
-      if (subCommand['yell']) {
+      if (subCommand['yell'] as bool) {
         usage = usage.toUpperCase();
         print("I'm yelling, so the case of the available commands will be off");
       }
@@ -74,14 +74,14 @@ void main(List<String> args) {
 
   final name = argResult.rest.isEmpty ? 'World' : argResult.rest.first;
 
-  final greeting = argResult['friendly'] ? 'Hiya' : 'Hello';
+  final greeting = argResult['friendly'] as bool ? 'Hiya' : 'Hello';
 
   final String salutationVal = argResult['salutation'];
   final salutation = salutationVal == null ? '' : '$salutationVal ';
 
-  var message = '$greeting, ${salutation}${name}';
+  var message = '$greeting, $salutation$name';
 
-  if (argResult['loud']) {
+  if (argResult['loud'] as bool) {
     message = message.toUpperCase();
   }
 
