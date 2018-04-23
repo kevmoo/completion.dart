@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bot/bot.dart';
+import 'bot.dart';
 import 'package:path/path.dart' as p;
 
 import 'util.dart';

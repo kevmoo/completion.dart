@@ -1,6 +1,6 @@
 import 'package:args/args.dart';
-import 'package:bot/bot.dart';
 
+import 'bot.dart';
 import 'util.dart';
 
 /*
