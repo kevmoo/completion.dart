@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 
 import 'bot.dart';
@@ -14,8 +15,31 @@ const String completionCommandName = 'completion';
 
 const _compPointVar = 'COMP_POINT';
 
-void tryCompletion(List<String> args,
-    List<String> completer(List<String> args, String compLine, int compPoint)) {
+void tryCompletion(
+    List<String> args,
+    List<String> completer(List<String> args, String compLine, int compPoint),
+    {@Deprecated('Useful for testing, but do not released with this set.')
+        logFile}) {
+  if (logFile != null) {
+    var logFile = new File('_completion.log');
+
+    void logLine(String content) {
+      logFile.writeAsStringSync('$content\n', mode: WRITE_ONLY_APPEND);
+    }
+
+    logLine(' *' * 50);
+
+    Logger.root.onRecord.listen((e) {
+      var loggerName = e.loggerName.split('.');
+      if (loggerName.isNotEmpty && loggerName.first == 'completion') {
+        loggerName.removeAt(0);
+        assert(e.level == Level.INFO);
+        logLine(
+            '${loggerName.join('.').padLeft(Tag.longestTagLength)}  ${e.message}');
+      }
+    });
+  }
+
   String scriptName;
   try {
     scriptName = p.basename(Platform.script.toFilePath());

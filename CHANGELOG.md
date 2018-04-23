@@ -2,6 +2,9 @@
 
 * Renamed `COMPLETION_COMMAND_NAME` to `completionCommandName`.
 
+* Added named `logFile` argument to `tryArgsCompletion` and `tryCompletion` to
+  aid debugging.
+
 ## 0.1.6
 
 * A bunch of internal cleanup.

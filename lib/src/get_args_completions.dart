@@ -26,7 +26,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   }
 
   void sublog(Object obj) {
-    log(obj, ['getArgsCompletions']);
+    log(obj, Tag.getArgsCompletions);
   }
 
   sublog('provided args: ${helpfulToString(providedArgs)}');

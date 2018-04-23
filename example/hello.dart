@@ -5,26 +5,17 @@ import 'package:completion/completion.dart';
 
 import '../test/completion_tests_args.dart';
 
-void main(List<String> args) {
-  /*
-   * It's nice to see what the completer is doing, but printing out debug
-   * strings during completion isn't...smart
-   *
-   * Uncomment the below line to set up logging. You'll see output from the
-   * completion logic.
-   *
-   * It's put into `hello.dart.log`
-   *
-   * enableScriptLogListener();
-   *
-   */
-
+main(List<String> args) {
   final argParser = getHelloSampleParser();
 
   ArgResults argResult;
 
   try {
-    argResult = tryArgsCompletion(args, argParser);
+    argResult = tryArgsCompletion(
+      args,
+      argParser,
+      // logFile: '_completion.log',
+    );
   } on FormatException catch (ex) {
     // TODO: print color?
     print(ex.message);

@@ -1,6 +1,16 @@
 import 'package:logging/logging.dart' as logging;
 
-void log(Object o, [List<String> subContexts]) {
+class Tag {
+  static const getArgsCompletions = const Tag._('getArgsCompletions');
+
+  final String name;
+
+  const Tag._(this.name);
+
+  static int get longestTagLength => getArgsCompletions.name.length;
+}
+
+void log(Object o, [Tag tag]) {
   String safe;
 
   try {
@@ -11,8 +21,8 @@ void log(Object o, [List<String> subContexts]) {
   }
 
   final startArgs = ['completion'];
-  if (subContexts != null) {
-    startArgs.addAll(subContexts);
+  if (tag != null) {
+    startArgs.add(tag.name);
   }
 
   final loggerName = startArgs.join('.');
