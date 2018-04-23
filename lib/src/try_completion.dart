@@ -58,6 +58,7 @@ void tryCompletion(
   if (args.length >= 3 && args[0] == completionCommandName && args[1] == '--') {
     try {
       log('Starting completion');
+      log('All args: $args');
       log('completion-reported exe: ${args[2]}');
 
       final env = Platform.environment;
