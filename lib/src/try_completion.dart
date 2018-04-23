@@ -50,10 +50,12 @@ void tryCompletion(List<String> args,
       final compPointValue = env[_COMP_POINT_VAR];
       require(compPointValue != null && compPointValue.isNotEmpty,
           'Environment variable $_COMP_POINT_VAR must be set and non-empty');
-      final compPoint = int.parse(compPointValue, onError: (val) {
+      final compPoint = int.tryParse(compPointValue);
+
+      if (compPoint == null) {
         throw new FormatException('Could not parse $_COMP_POINT_VAR value '
-            '"$val" into an integer');
-      });
+            '"$compPointValue" into an integer');
+      }
 
       final trimmedArgs = args.sublist(3);
 

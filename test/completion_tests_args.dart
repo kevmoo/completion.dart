@@ -19,10 +19,8 @@ ArgParser getHelloSampleParser() {
       allowed: ['Mr', 'Mrs', 'Dr', 'Ms']);
 
   // allow multiple
-  parser.addOption('middle-name',
-      abbr: 'm',
-      help: 'Do you have one or more middle names?',
-      allowMultiple: true);
+  parser.addMultiOption('middle-name',
+      abbr: 'm', help: 'Do you have one or more middle names?');
 
   final helpParser = parser.addCommand('help');
   helpParser.addFlag('yell',

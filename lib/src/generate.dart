@@ -5,7 +5,6 @@ import 'package:path/path.dart' as pathos;
 
 const _BIN_NAME_REPLACEMENT = '{{binName}}';
 const _FUNC_NAME_REPLACEMENT = '{{funcName}}';
-const _SCRIPT_DETAILS_REPLACEMENT = '{{details}}';
 
 /*
  * Must be at least one char.

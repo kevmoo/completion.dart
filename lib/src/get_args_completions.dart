@@ -255,7 +255,7 @@ Iterable<String> _getParserOptionCompletions(
 
   return parser.options.values
       .where((opt) =>
-          !existingOptions.contains(opt) || opt.type == OptionType.MULTIPLE)
+          !existingOptions.contains(opt) || opt.type == OptionType.multiple)
       .expand(_getArgsOptionCompletions);
 }
 
