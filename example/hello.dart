@@ -1,4 +1,4 @@
-#!/usr/bin/env dart --checked
+#!/usr/bin/env dart
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:completion/completion.dart';

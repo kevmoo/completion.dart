@@ -10,7 +10,6 @@
 #    for completion files, such as:
 #
 #    /usr/local/etc/bash_completion.d/
-#
 
 ###-begin-hello.dart-completion-###
 
@@ -57,6 +56,5 @@ fi
 
 ###-end-hello.dart-completion-###
 
-## Generated 2014-03-05 05:13:54.104Z
-## By /Users/kevmoo/source/github/completion.dart/bin/shell-completion-generator
-
+## Generated 2018-04-24 15:45:52.542816Z
+## By /Users/kevmoo/source/github/completion.dart/bin/shell_completion_generator.dart

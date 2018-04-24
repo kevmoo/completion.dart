@@ -62,7 +62,7 @@ String generateCompletionScript(List<String> binaryNames) {
   }
 
   final details = detailLines.map((l) => '## $l').join('\n');
-  buffer.writeln(details);
+  buffer.write(details);
 
   return buffer.toString();
 }
