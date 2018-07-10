@@ -24,7 +24,7 @@ void tryCompletion(
     var logFile = new File('_completion.log');
 
     void logLine(String content) {
-      logFile.writeAsStringSync('$content\n', mode: WRITE_ONLY_APPEND);
+      logFile.writeAsStringSync('$content\n', mode: FileMode.writeOnlyAppend);
     }
 
     logLine(' *' * 50);
