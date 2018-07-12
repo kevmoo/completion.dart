@@ -43,15 +43,8 @@ void tryCompletion(
   String scriptName;
   try {
     scriptName = p.basename(Platform.script.toFilePath());
-  } on UnsupportedError catch (e, stack) {
-    log(e);
-    log(stack);
-    return;
-  }
-
-  if (scriptName.isEmpty) {
-    // should have a script name...weird...
-    return;
+  } on UnsupportedError catch (e) {
+    scriptName = '<unknown>';
   }
 
   log('Checking for completion on script:\t$scriptName');
