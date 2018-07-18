@@ -1,3 +1,9 @@
+## 0.2.1
+
+* Exposed the `tryCompletion` method as a public interface.
+
+* Added more complete instructions in the [`README.md`](README.md)
+
 ## 0.2.0
 
 * Renamed `COMPLETION_COMMAND_NAME` to `completionCommandName`.

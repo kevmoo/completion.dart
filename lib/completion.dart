@@ -4,6 +4,7 @@ import 'src/get_args_completions.dart';
 import 'src/try_completion.dart';
 
 export 'src/generate.dart';
+export 'src/try_completion.dart';
 
 ArgResults tryArgsCompletion(
     List<String> mainArgs,
