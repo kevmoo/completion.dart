@@ -43,7 +43,7 @@ void tryCompletion(
   String scriptName;
   try {
     scriptName = p.basename(Platform.script.toFilePath());
-  } on UnsupportedError catch (e) {
+  } on UnsupportedError {
     scriptName = '<unknown>';
   }
 
