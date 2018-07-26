@@ -58,5 +58,6 @@ linter:
     - unnecessary_lambdas
     - unnecessary_null_aware_assignments
     - unnecessary_statements
+    - unused_catch_clause
     - unrelated_type_equality_checks
     - valid_regexps

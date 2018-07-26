@@ -1,3 +1,7 @@
+## 0.2.1+1
+
+* Small fix to error handler.
+
 ## 0.2.1
 
 * Exposed the `tryCompletion` method as a public interface.
