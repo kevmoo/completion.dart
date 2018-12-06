@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
 
 ArgParser getHelloSampleParser() {
-  final parser = new ArgParser();
+  final parser = ArgParser();
 
   // not negatable
   parser.addFlag('friendly',

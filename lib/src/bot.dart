@@ -22,9 +22,9 @@ class Util {
   static int getHashCode(Iterable source) {
     requireArgumentNotNull(source, 'source');
 
-    int hash = 0;
+    var hash = 0;
     for (final h in source) {
-      int next = h == null ? 0 : h.hashCode;
+      var next = h == null ? 0 : h.hashCode;
       hash = 0x1fffffff & (hash + next);
       hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
       hash ^= hash >> 6;
@@ -37,19 +37,19 @@ class Util {
 
 void require(bool truth, [String message]) {
   if (!truth) {
-    throw new Exception(message);
+    throw Exception(message);
   }
 }
 
 void requireArgumentNotNull(argument, String argName) {
   _metaRequireArgumentNotNullOrEmpty(argName);
   if (argument == null) {
-    throw new ArgumentError.notNull(argName);
+    throw ArgumentError.notNull(argName);
   }
 }
 
 void _metaRequireArgumentNotNullOrEmpty(String argName) {
   if (argName == null || argName.isEmpty) {
-    throw new UnsupportedError("That's just sad. Give me a good argName");
+    throw UnsupportedError("That's just sad. Give me a good argName");
   }
 }

@@ -1,7 +1,7 @@
 import 'package:logging/logging.dart' as logging;
 
 class Tag {
-  static const getArgsCompletions = const Tag._('getArgsCompletions');
+  static const getArgsCompletions = Tag._('getArgsCompletions');
 
   final String name;
 
@@ -27,7 +27,7 @@ void log(Object o, [Tag tag]) {
 
   final loggerName = startArgs.join('.');
 
-  final logger = new logging.Logger(loggerName);
+  final logger = logging.Logger(loggerName);
 
   logger.info(safe);
 }
