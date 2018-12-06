@@ -6,7 +6,7 @@
 #
 
 APP_NAME=example.dart
-COMPETION_NAME=example-completion.sh
+COMPLETION_NAME=example-completion.sh
 
 APP_DIR=$( cd $( dirname "${BASH_SOURCE[0]}" ) && pwd )
 
@@ -18,15 +18,15 @@ fi
 
 if [ ! -f $APP_DIR/$COMPETION_NAME ]
 then
-  echo $COMPETION_NAME does not exist in the expected directory
+  echo $COMPLETION_NAME does not exist in the expected directory
   exit 1
 fi
 
 echo Initializing your environment to run the $APP_NAME completion sample
 echo
 
-echo 'sourcing' $COMPETION_NAME to enable command completion
-source $APP_DIR/$COMPETION_NAME
+echo 'sourcing' $COMPLETION_NAME to enable command completion
+source $APP_DIR/$COMPLETION_NAME
 
 echo
 echo Adding $APP_NAME directory \($APP_DIR\) to PATH environment

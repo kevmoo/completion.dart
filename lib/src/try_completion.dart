@@ -56,7 +56,7 @@ void tryCompletion(
 
       final env = Platform.environment;
 
-      // There are 3 interesting env paramaters passed by the completion logic
+      // There are 3 interesting env parameters passed by the completion logic
       // COMP_LINE:  the full contents of the completion
       final compLine = env['COMP_LINE'];
       require(compLine != null, 'Environment variable COMP_LINE must be set');
