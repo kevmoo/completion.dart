@@ -5,8 +5,8 @@
 #  source hello_completion_init.sh
 #
 
-APP_NAME=hello.dart
-COMPETION_NAME=hello-completion.sh
+APP_NAME=example.dart
+COMPETION_NAME=example-completion.sh
 
 APP_DIR=$( cd $( dirname "${BASH_SOURCE[0]}" ) && pwd )
 

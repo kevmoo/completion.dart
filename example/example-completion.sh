@@ -11,32 +11,32 @@
 #
 #    /usr/local/etc/bash_completion.d/
 
-###-begin-hello.dart-completion-###
+###-begin-example.dart-completion-###
 
 if type complete &>/dev/null; then
-  __hello_dart_completion() {
+  __example_dart_completion() {
     local si="$IFS"
     IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
                            COMP_LINE="$COMP_LINE" \
                            COMP_POINT="$COMP_POINT" \
-                           hello.dart completion -- "${COMP_WORDS[@]}" \
+                           example.dart completion -- "${COMP_WORDS[@]}" \
                            2>/dev/null)) || return $?
     IFS="$si"
   }
-  complete -F __hello_dart_completion hello.dart
+  complete -F __example_dart_completion example.dart
 elif type compdef &>/dev/null; then
-  __hello_dart_completion() {
+  __example_dart_completion() {
     si=$IFS
     compadd -- $(COMP_CWORD=$((CURRENT-1)) \
                  COMP_LINE=$BUFFER \
                  COMP_POINT=0 \
-                 hello.dart completion -- "${words[@]}" \
+                 example.dart completion -- "${words[@]}" \
                  2>/dev/null)
     IFS=$si
   }
-  compdef __hello_dart_completion hello.dart
+  compdef __example_dart_completion example.dart
 elif type compctl &>/dev/null; then
-  __hello_dart_completion() {
+  __example_dart_completion() {
     local cword line point words si
     read -Ac words
     read -cn cword
@@ -47,14 +47,14 @@ elif type compctl &>/dev/null; then
     IFS=$'\n' reply=($(COMP_CWORD="$cword" \
                        COMP_LINE="$line" \
                        COMP_POINT="$point" \
-                       hello.dart completion -- "${words[@]}" \
+                       example.dart completion -- "${words[@]}" \
                        2>/dev/null)) || return $?
     IFS="$si"
   }
-  compctl -K __hello_dart_completion hello.dart
+  compctl -K __example_dart_completion example.dart
 fi
 
-###-end-hello.dart-completion-###
+###-end-example.dart-completion-###
 
-## Generated 2018-04-24 15:45:52.542816Z
+## Generated 2018-12-06 13:41:53.261614Z
 ## By /Users/kevmoo/source/github/completion.dart/bin/shell_completion_generator.dart
