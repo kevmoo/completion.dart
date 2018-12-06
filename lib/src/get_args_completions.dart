@@ -13,7 +13,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   assert(parser != null);
   assert(providedArgs != null);
   // all arg entries: no empty items, no null items, all pre-trimmed
-  for (int i = 0; i < providedArgs.length; i++) {
+  for (var i = 0; i < providedArgs.length; i++) {
     final arg = providedArgs[i];
     final msg = 'Arg at index $i with value "$arg" ';
     requireArgumentNotNull(arg, '$msg is null');
@@ -66,7 +66,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
       .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
-  var parserOptionCompletions = new List<String>.unmodifiable(
+  var parserOptionCompletions = List<String>.unmodifiable(
       _getParserOptionCompletions(parser, optionsDefinedInArgs));
 
   /*
@@ -160,7 +160,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
         assert(!option.isFlag);
         sublog('completing option "${option.name}"');
 
-        final String optionValue = providedArgs[providedArgs.length - 1];
+        final optionValue = providedArgs[providedArgs.length - 1];
 
         return option.allowed
             .where((String v) => v.startsWith(optionValue))
@@ -285,11 +285,11 @@ Tuple<List<String>, ArgResults> _getValidSubset(
     validSubSet.removeLast();
   }
 
-  return new Tuple(validSubSet, subsetResult);
+  return Tuple(validSubSet, subsetResult);
 }
 
 List<String> _getArgsOptionCompletions(Option option) {
-  final items = new List<String>();
+  final items = <String>[];
 
   items.add('--${option.name}');
 

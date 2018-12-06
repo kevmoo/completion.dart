@@ -21,7 +21,7 @@ void tryCompletion(
     {@Deprecated('Useful for testing, but do not release with this set.')
         logFile}) {
   if (logFile != null) {
-    var logFile = new File('_completion.log');
+    var logFile = File('_completion.log');
 
     void logLine(String content) {
       logFile.writeAsStringSync('$content\n', mode: FileMode.writeOnlyAppend);
@@ -69,7 +69,7 @@ void tryCompletion(
       final compPoint = int.tryParse(compPointValue);
 
       if (compPoint == null) {
-        throw new FormatException('Could not parse $_compPointVar value '
+        throw FormatException('Could not parse $_compPointVar value '
             '"$compPointValue" into an integer');
       }
 

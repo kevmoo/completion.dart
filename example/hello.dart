@@ -5,7 +5,7 @@ import 'package:completion/completion.dart';
 
 import '../test/completion_tests_args.dart';
 
-main(List<String> args) {
+void main(List<String> args) {
   final argParser = getHelloSampleParser();
 
   ArgResults argResult;
@@ -45,7 +45,7 @@ main(List<String> args) {
           print(subCommandParser.usage);
           return;
         } else {
-          throw new StateError(
+          throw StateError(
               'no clue what that subCammand is: ${subSubCommand.name}');
         }
       }

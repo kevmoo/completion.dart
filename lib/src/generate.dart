@@ -12,7 +12,7 @@ const _funcNameReplacement = '{{funcName}}';
  * Can contain letters, numbers, '_', '-', '.'
  * Must end with letter or number
  */
-final _binNameMatch = new RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
+final _binNameMatch = RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
 
 /*
  * Format for unified bash and zsh completion script:
@@ -26,18 +26,18 @@ final _binNameMatch = new RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
 
 String generateCompletionScript(List<String> binaryNames) {
   if (binaryNames.isEmpty) {
-    throw new ArgumentError('Provide the name of at least of one command');
+    throw ArgumentError('Provide the name of at least of one command');
   }
 
   for (final binName in binaryNames) {
     if (!_binNameMatch.hasMatch(binName)) {
       final msg = 'The provided name - "$binName" - is invalid\n'
           'It must match regex: ${_binNameMatch.pattern}';
-      throw new StateError(msg);
+      throw StateError(msg);
     }
   }
 
-  var buffer = new StringBuffer();
+  var buffer = StringBuffer();
 
   final prefix =
       LineSplitter.split(_prefix).map((l) => '# $l'.trim()).join('\n');
@@ -51,7 +51,7 @@ String generateCompletionScript(List<String> binaryNames) {
   }
 
   final detailLines = [
-    'Generated ${new DateTime.now().toUtc()}',
+    'Generated ${DateTime.now().toUtc()}',
   ];
 
   if (Platform.script.scheme == 'file') {
