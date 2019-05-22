@@ -1,5 +1,6 @@
 #!/usr/bin/env dart
 import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:completion/completion.dart';
 
@@ -67,7 +68,7 @@ void main(List<String> args) {
 
   final greeting = argResult['friendly'] as bool ? 'Hiya' : 'Hello';
 
-  final String salutationVal = argResult['salutation'];
+  final salutationVal = argResult['salutation'] as String;
   final salutation = salutationVal == null ? '' : '$salutationVal ';
 
   var message = '$greeting, $salutation$name';

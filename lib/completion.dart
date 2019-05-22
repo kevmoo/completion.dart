@@ -16,7 +16,7 @@ ArgResults tryArgsCompletion(
     (List<String> args, String compLine, int compPoint) {
       return getArgsCompletions(parser, args, compLine, compPoint);
     },
-    // ignore: deprecated_member_use
+    // ignore: deprecated_member_use_from_same_package
     logFile: logFile,
   );
   return parser.parse(mainArgs);
