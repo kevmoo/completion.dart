@@ -17,7 +17,8 @@ const _compPointVar = 'COMP_POINT';
 
 void tryCompletion(
     List<String> args,
-    List<String> completer(List<String> args, String compLine, int compPoint),
+    List<String> Function(List<String> args, String compLine, int compPoint)
+        completer,
     {@Deprecated('Useful for testing, but do not release with this set.')
         logFile}) {
   if (logFile != null) {
