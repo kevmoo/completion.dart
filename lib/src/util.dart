@@ -27,9 +27,7 @@ void log(Object o, [Tag tag]) {
 
   final loggerName = startArgs.join('.');
 
-  final logger = logging.Logger(loggerName);
-
-  logger.info(safe);
+  logging.Logger(loggerName)..info(safe);
 }
 
 String helpfulToString(Object input) {

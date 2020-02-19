@@ -5,9 +5,8 @@ class Tuple<T1, T2> {
   const Tuple(this.item1, this.item2);
 
   @override
-  bool operator ==(other) {
-    return other is Tuple && item1 == other.item1 && item2 == other.item2;
-  }
+  bool operator ==(other) =>
+      other is Tuple && item1 == other.item1 && item2 == other.item2;
 
   @override
   String toString() => '{item1: $item1, item2: $item2}';
@@ -24,7 +23,7 @@ class Util {
 
     var hash = 0;
     for (final h in source) {
-      var next = h == null ? 0 : h.hashCode;
+      final next = h == null ? 0 : h.hashCode;
       hash = 0x1fffffff & (hash + next);
       hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
       hash ^= hash >> 6;

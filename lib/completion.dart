@@ -13,9 +13,8 @@ ArgResults tryArgsCompletion(
         logFile}) {
   tryCompletion(
     mainArgs,
-    (List<String> args, String compLine, int compPoint) {
-      return getArgsCompletions(parser, args, compLine, compPoint);
-    },
+    (List<String> args, String compLine, int compPoint) =>
+        getArgsCompletions(parser, args, compLine, compPoint),
     // ignore: deprecated_member_use_from_same_package,deprecated_member_use
     logFile: logFile,
   );

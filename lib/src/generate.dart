@@ -37,14 +37,14 @@ String generateCompletionScript(List<String> binaryNames) {
     }
   }
 
-  var buffer = StringBuffer();
+  final buffer = StringBuffer();
 
   final prefix =
       LineSplitter.split(_prefix).map((l) => '# $l'.trim()).join('\n');
-  buffer.writeln(prefix);
-
-  // empty line
-  buffer.writeln('');
+  buffer
+    ..writeln(prefix)
+    // empty line
+    ..writeln('');
 
   for (final binName in binaryNames) {
     buffer.writeln(_printBinName(binName));
@@ -68,14 +68,11 @@ String generateCompletionScript(List<String> binaryNames) {
 }
 
 String _printBinName(String binName) {
-  var templateContents = _template.replaceAll(_binNameReplacement, binName);
+  final templateContents = _template.replaceAll(_binNameReplacement, binName);
 
   var funcName = binName.replaceAll('.', '_');
   funcName = '__${funcName}_completion';
-  templateContents =
-      templateContents.replaceAll(_funcNameReplacement, funcName);
-
-  return templateContents;
+  return templateContents.replaceAll(_funcNameReplacement, funcName);
 }
 
 const _prefix = '''

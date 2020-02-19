@@ -36,45 +36,55 @@ void main() {
       _CompletionSet("+flag don't offer --friendly twice", ['--friendly', '--'],
           ['--loud', '--no-loud', '--salutation', '--middle-name']),
       _CompletionSet(
-          "+abbr+flag+no-multiple don't offer --friendly twice, even if the first one is the abbreviation",
+          "+abbr+flag+no-multiple don't offer --friendly twice, even if the "
+          'first one is the abbreviation',
           ['-f', '--'],
           ['--loud', '--no-loud', '--salutation', '--middle-name']),
       _CompletionSet("+flag+no-multiple don't complete a second --friendly",
           ['--friendly', '--friend'], []),
       _CompletionSet(
-          "+abbr+flag+no-multiple don't complete a second --friendly, even if the first one is the abbreviation",
+          "+abbr+flag+no-multiple don't complete a second --friendly, even if "
+          'the first one is the abbreviation',
           ['-f', '--friend'],
           []),
       _CompletionSet(
-          "+flag+negatable+no-multiple don't complete the opposite of a negatable - 1",
+          "+flag+negatable+no-multiple don't complete the opposite of a "
+          'negatable - 1',
           ['--no-loud', '--'],
           ['--friendly', '--salutation', '--middle-name']),
       _CompletionSet(
-          "+flag+negatable+no-multiple don't complete the opposite of a negatable - 2",
+          "+flag+negatable+no-multiple don't complete the opposite of a "
+          'negatable - 2',
           ['--loud', '--'],
           ['--friendly', '--salutation', '--middle-name']),
       _CompletionSet(
-          "+option+no-allowed+multiple okay to have multiple 'multiple' options",
-          ['--middle-name', 'Robert', '--'],
-          allOptions),
+        "+option+no-allowed+multiple okay to have multiple 'multiple' options",
+        ['--middle-name', 'Robert', '--'],
+        allOptions,
+      ),
       _CompletionSet(
-          "+option+no-allowed+multiple okay to have multiple 'multiple' options, even abbreviations",
+          "+option+no-allowed+multiple okay to have multiple 'multiple' "
+          'options, even abbreviations',
           ['-m', '"John Davis"', '--'],
           allOptions),
       _CompletionSet(
-          "+option+no-allowed don't suggest if an option is waiting for a value",
-          ['--middle-name', ''],
-          []),
+        "+option+no-allowed don't suggest if an option is waiting for a value",
+        ['--middle-name', ''],
+        [],
+      ),
       _CompletionSet(
-          "+abbr+option+no-allowed don't suggest if an option is waiting for a value",
+          "+abbr+option+no-allowed don't suggest if an option is waiting for a "
+          'value',
           ['-m', ''],
           []),
       _CompletionSet(
-          '+option+allowed suggest completions for an option with allowed defined',
+          '+option+allowed suggest completions for an option with allowed '
+          'defined',
           ['--salutation', ''],
           ['Mr', 'Mrs', 'Dr', 'Ms']),
       _CompletionSet(
-          '+option+allowed finish a completion for an option (added via abbr) with allowed defined',
+          '+option+allowed finish a completion for an option (added via abbr) '
+          'with allowed defined',
           ['-s', 'M'],
           ['Mr', 'Mrs', 'Ms']),
       _CompletionSet("+abbr+option+allowed don't finish a bad completion",
@@ -82,17 +92,19 @@ void main() {
       _CompletionSet(
           '+abbr+option+allowed confirm a completion', ['-s', 'Dr'], ['Dr']),
       _CompletionSet(
-          '+abbr+option+allowed back to command completion after a completed option',
+          '+abbr+option+allowed back to command completion after a completed '
+          'option',
           ['-s', 'Dr', ''],
           ['help']),
       _CompletionSet(
-          '+abbr+option+allowed back to option completion after a completed option',
+          '+abbr+option+allowed back to option completion after a completed '
+          'option',
           ['-s', 'Dr', '--'],
           ['--friendly', '--loud', '--no-loud', '--middle-name']),
     ];
 
     test('compPoint not at the end', () {
-      final compLine = 'help';
+      const compLine = 'help';
       final args = ['help'];
 
       _testCompletionPair(parser, args, ['help'], compLine, compLine.length);

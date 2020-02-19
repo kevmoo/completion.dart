@@ -1,3 +1,7 @@
+## 0.2.2
+
+* Increase minimum Dart SDK to `2.3.0`.
+
 ## 0.2.1+1
 
 * Small fix to error handler.

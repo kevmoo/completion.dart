@@ -60,13 +60,13 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
 
   // a set of options in use (minus, potentially, the last one)
   // all non-null, all unique
-  var optionsDefinedInArgs = alignedArgsOptions
+  final optionsDefinedInArgs = alignedArgsOptions
       .take(alignedArgsOptions.length - 1)
       .where((o) => o != null)
       .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
-  var parserOptionCompletions = List<String>.unmodifiable(
+  final parserOptionCompletions = List<String>.unmodifiable(
       _getParserOptionCompletions(parser, optionsDefinedInArgs));
 
   /*
@@ -288,16 +288,7 @@ Tuple<List<String>, ArgResults> _getValidSubset(
   return Tuple(validSubSet, subsetResult);
 }
 
-List<String> _getArgsOptionCompletions(Option option) {
-  final items = <String>[];
-
-  items.add('--${option.name}');
-
-  if (option.negatable) {
-    items.add('--no-${option.name}');
-  }
-
-  items.sort();
-
-  return items;
-}
+List<String> _getArgsOptionCompletions(Option option) => <String>[
+      '--${option.name}',
+      if (option.negatable) '--no-${option.name}'
+    ]..sort();
