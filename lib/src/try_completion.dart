@@ -22,7 +22,7 @@ void tryCompletion(
     {@Deprecated('Useful for testing, but do not release with this set.')
         logFile}) {
   if (logFile != null) {
-    var logFile = File('_completion.log');
+    final logFile = File('_completion.log');
 
     void logLine(String content) {
       logFile.writeAsStringSync('$content\n', mode: FileMode.writeOnlyAppend);
@@ -31,12 +31,14 @@ void tryCompletion(
     logLine(' *' * 50);
 
     Logger.root.onRecord.listen((e) {
-      var loggerName = e.loggerName.split('.');
+      final loggerName = e.loggerName.split('.');
       if (loggerName.isNotEmpty && loggerName.first == 'completion') {
         loggerName.removeAt(0);
         assert(e.level == Level.INFO);
         logLine(
-            '${loggerName.join('.').padLeft(Tag.longestTagLength)}  ${e.message}');
+          '${loggerName.join('.').padLeft(Tag.longestTagLength)}  '
+          '${e.message}',
+        );
       }
     });
   }
@@ -44,7 +46,8 @@ void tryCompletion(
   String scriptName;
   try {
     scriptName = p.basename(Platform.script.toFilePath());
-  } on UnsupportedError {
+  } on UnsupportedError // ignore: avoid_catching_errors
+  {
     scriptName = '<unknown>';
   }
 

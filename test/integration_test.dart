@@ -4,12 +4,12 @@ import 'package:test_process/test_process.dart';
 
 import 'test_utils.dart';
 
-final _exampleFileName = 'example.dart';
+const _exampleFileName = 'example.dart';
 final _exampleFilePath = p.join('example', _exampleFileName);
 
 void main() {
   test('normal execution', () async {
-    var process = await TestProcess.start(dartPath, [_exampleFilePath]);
+    final process = await TestProcess.start(dartPath, [_exampleFilePath]);
 
     await expectLater(process.stdout, emitsThrough('Hello, World'));
 
@@ -17,7 +17,7 @@ void main() {
   });
 
   test('basic completion', () async {
-    var process = await TestProcess.start(dartPath,
+    final process = await TestProcess.start(dartPath,
         [_exampleFilePath, 'completion', '--', _exampleFileName, '--'],
         environment: {'COMP_POINT': '15', 'COMP_LINE': '$_exampleFileName --'});
 
