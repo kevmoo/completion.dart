@@ -259,8 +259,7 @@ Iterable<String> _getParserOptionCompletions(
       .expand(_getArgsOptionCompletions);
 }
 
-Tuple<List<String>, ArgResults> _getValidSubset(
-    ArgParser parser, List<String> providedArgs) {
+_Tuple _getValidSubset(ArgParser parser, List<String> providedArgs) {
   /* start with all of the args, loop through parsing them,
    * removing one every time
    *
@@ -285,10 +284,29 @@ Tuple<List<String>, ArgResults> _getValidSubset(
     validSubSet.removeLast();
   }
 
-  return Tuple(validSubSet, subsetResult);
+  return _Tuple(validSubSet, subsetResult);
 }
 
 List<String> _getArgsOptionCompletions(Option option) => <String>[
       '--${option.name}',
       if (option.negatable) '--no-${option.name}'
     ]..sort();
+
+class _Tuple {
+  final List<String> item1;
+  final ArgResults item2;
+
+  const _Tuple(this.item1, this.item2);
+
+  @override
+  bool operator ==(other) =>
+      other is _Tuple && item1 == other.item1 && item2 == other.item2;
+
+  @override
+  String toString() => '{item1: $item1, item2: $item2}';
+
+  @override
+  int get hashCode => Util.getHashCode([item1, item2]);
+
+  dynamic toJson() => {'item1': item1, 'item2': item2};
+}
