@@ -1,6 +1,5 @@
 import 'package:args/args.dart';
 
-import 'bot.dart';
 import 'util.dart';
 
 /*
@@ -8,20 +7,24 @@ import 'util.dart';
  *       then tabbing into an app just completes to that one command. Weird?
  */
 
-List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
-    String compLine, int compPoint) {
+List<String> getArgsCompletions(
+  ArgParser parser,
+  List<String> providedArgs,
+  String compLine,
+  int compPoint,
+) {
   assert(parser != null);
   assert(providedArgs != null);
   // all arg entries: no empty items, no null items, all pre-trimmed
   for (var i = 0; i < providedArgs.length; i++) {
     final arg = providedArgs[i];
     final msg = 'Arg at index $i with value "$arg" ';
-    requireArgumentNotNull(arg, '$msg is null');
-    require(arg.trim() == arg, '$msg has whitespace');
+    if (arg.trim() != arg) throw StateError('$msg has whitespace');
 
     if (i < (providedArgs.length - 1)) {
-      require(
-          arg.isNotEmpty, '$msg – Only the last arg can be an empty string');
+      if (arg.isEmpty) {
+        throw StateError('$msg – Only the last arg can be an empty string');
+      }
     }
   }
 
@@ -67,7 +70,7 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
   final parserOptionCompletions = List<String>.unmodifiable(
-      _getParserOptionCompletions(parser, optionsDefinedInArgs));
+      _parserOptionCompletions(parser, optionsDefinedInArgs));
 
   /*
    * KNOWN: at least one item in providedArgs last and first are now safe
@@ -79,9 +82,9 @@ List<String> getArgsCompletions(ArgParser parser, List<String> providedArgs,
    * If it does, we can use the result to determine what we should do next
    */
 
-  final subsetTuple = _getValidSubset(parser, providedArgs);
-  final validSubSet = subsetTuple.item1;
-  final subsetResult = subsetTuple.item2;
+  final subsetTuple = _validSubset(parser, providedArgs);
+  final validSubSet = subsetTuple.subset;
+  final subsetResult = subsetTuple.result;
 
   sublog('valid subset: ${helpfulToString(validSubSet)}');
 
@@ -248,7 +251,7 @@ Option _getOptionForArg(ArgParser parser, String arg) {
   return null;
 }
 
-Iterable<String> _getParserOptionCompletions(
+Iterable<String> _parserOptionCompletions(
     ArgParser parser, Set<Option> existingOptions) {
   assert(
       existingOptions.every((option) => parser.options.containsValue(option)));
@@ -256,10 +259,10 @@ Iterable<String> _getParserOptionCompletions(
   return parser.options.values
       .where((opt) =>
           !existingOptions.contains(opt) || opt.type == OptionType.multiple)
-      .expand(_getArgsOptionCompletions);
+      .expand(_argsOptionCompletions);
 }
 
-_Tuple _getValidSubset(ArgParser parser, List<String> providedArgs) {
+_Tuple _validSubset(ArgParser parser, List<String> providedArgs) {
   /* start with all of the args, loop through parsing them,
    * removing one every time
    *
@@ -287,26 +290,14 @@ _Tuple _getValidSubset(ArgParser parser, List<String> providedArgs) {
   return _Tuple(validSubSet, subsetResult);
 }
 
-List<String> _getArgsOptionCompletions(Option option) => <String>[
+List<String> _argsOptionCompletions(Option option) => <String>[
       '--${option.name}',
-      if (option.negatable) '--no-${option.name}'
+      if (option.negatable) '--no-${option.name}',
     ]..sort();
 
 class _Tuple {
-  final List<String> item1;
-  final ArgResults item2;
+  final List<String> subset;
+  final ArgResults result;
 
-  const _Tuple(this.item1, this.item2);
-
-  @override
-  bool operator ==(other) =>
-      other is _Tuple && item1 == other.item1 && item2 == other.item2;
-
-  @override
-  String toString() => '{item1: $item1, item2: $item2}';
-
-  @override
-  int get hashCode => Util.getHashCode([item1, item2]);
-
-  dynamic toJson() => {'item1': item1, 'item2': item2};
+  const _Tuple(this.subset, this.result);
 }

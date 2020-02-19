@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 
-import 'bot.dart';
 import 'util.dart';
 
 /// The string 'completion' used to denote that arguments provided to an app are
@@ -63,13 +62,17 @@ void tryCompletion(
       // There are 3 interesting env parameters passed by the completion logic
       // COMP_LINE:  the full contents of the completion
       final compLine = env['COMP_LINE'];
-      require(compLine != null, 'Environment variable COMP_LINE must be set');
+      if (compLine == null) {
+        throw StateError('Environment variable COMP_LINE must be set');
+      }
 
       // COMP_CWORD: number of words. Also might be nice
       // COMP_POINT: where the cursor is on the completion line
       final compPointValue = env[_compPointVar];
-      require(compPointValue != null && compPointValue.isNotEmpty,
-          'Environment variable $_compPointVar must be set and non-empty');
+      if (compPointValue == null || compPointValue.isEmpty) {
+        throw StateError(
+            'Environment variable $_compPointVar must be set and non-empty');
+      }
       final compPoint = int.tryParse(compPointValue);
 
       if (compPoint == null) {
