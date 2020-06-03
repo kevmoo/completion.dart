@@ -21,11 +21,7 @@ ArgParser getHelloSampleParser() {
         abbr: 'm', help: 'Do you have one or more middle names?');
 
   parser.addCommand('help')
-    ..addFlag('yell',
-        abbr: 'h',
-        help: 'Happy to yell at you :-)',
-        negatable: true,
-        defaultsTo: false)
+    ..addFlag('yell', abbr: 'h', help: 'Happy to yell at you :-)')
     ..addCommand('assistance');
 
   return parser;
