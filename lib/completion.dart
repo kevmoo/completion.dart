@@ -7,10 +7,11 @@ export 'src/generate.dart';
 export 'src/try_completion.dart';
 
 ArgResults tryArgsCompletion(
-    List<String> mainArgs,
-    ArgParser parser,
-    {@Deprecated('Useful for testing, but do not released with this set.')
-        logFile}) {
+  List<String> mainArgs,
+  ArgParser parser, {
+  @Deprecated('Useful for testing, but do not released with this set.')
+      bool logFile,
+}) {
   tryCompletion(
     mainArgs,
     (List<String> args, String compLine, int compPoint) =>

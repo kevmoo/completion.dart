@@ -15,12 +15,13 @@ const String completionCommandName = 'completion';
 const _compPointVar = 'COMP_POINT';
 
 void tryCompletion(
-    List<String> args,
-    List<String> Function(List<String> args, String compLine, int compPoint)
-        completer,
-    {@Deprecated('Useful for testing, but do not release with this set.')
-        logFile}) {
-  if (logFile != null) {
+  List<String> args,
+  List<String> Function(List<String> args, String compLine, int compPoint)
+      completer, {
+  @Deprecated('Useful for testing, but do not release with this set.')
+      bool logFile,
+}) {
+  if (logFile == true) {
     final logFile = File('_completion.log');
 
     void logLine(String content) {
