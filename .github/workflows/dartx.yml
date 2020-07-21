@@ -60,4 +60,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Dartfmt
-        run: dartfmt --set-exit-if-changed -w --fix .
+        run: dartfmt --set-exit-if-changed -w .
