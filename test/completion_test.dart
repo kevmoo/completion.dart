@@ -121,6 +121,10 @@ void main() {
       });
     }
   });
+
+  test('failure', () {
+    fail('why not?');
+  });
 }
 
 List<String> _getAllOptions(ArgParser parser) {
