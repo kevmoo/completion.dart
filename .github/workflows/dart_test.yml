@@ -1,0 +1,29 @@
+name: Dart CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        version: ["2.6", "2.7", "2.8", "dev"]
+
+    container:
+      image:  google/dart:${{ matrix.version }}
+
+	steps:
+	  - name: Run tests
+	    run: pub run test --file-reporter="json:test-report.json"
+	    continue-on-error: true
+	  - name: Annotate files with test errors
+	    uses: rodrigost23/dart-test-annotations
+	    with:
+	      path: test-report.json
