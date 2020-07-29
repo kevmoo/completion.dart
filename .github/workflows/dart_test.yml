@@ -20,6 +20,9 @@ jobs:
       image:  google/dart:${{ matrix.version }}
 
     steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: pub get
       - name: Run tests
         run: pub run test --file-reporter="json:test-report.json"
         continue-on-error: true
