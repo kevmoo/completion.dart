@@ -19,11 +19,11 @@ jobs:
     container:
       image:  google/dart:${{ matrix.version }}
 
-	steps:
-	  - name: Run tests
-	    run: pub run test --file-reporter="json:test-report.json"
-	    continue-on-error: true
-	  - name: Annotate files with test errors
-	    uses: rodrigost23/dart-test-annotations
-	    with:
-	      path: test-report.json
+    steps:
+      - name: Run tests
+        run: pub run test --file-reporter="json:test-report.json"
+        continue-on-error: true
+      - name: Annotate files with test errors
+        uses: rodrigost23/dart-test-annotations
+        with:
+          path: test-report.json
