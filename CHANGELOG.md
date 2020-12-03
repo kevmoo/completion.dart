@@ -1,3 +1,8 @@
+## 0.2.3
+
+* Prevent `tryCompletion` from crashing when looking up the script name when run
+  without a current working directory.
+
 ## 0.2.2
 
 * Increase minimum Dart SDK to `2.3.0`.

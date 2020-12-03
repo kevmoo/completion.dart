@@ -1,6 +1,6 @@
 name: completion
-version: 0.2.2
-description: A packaged to add shell command completion to your Dart application
+version: 0.2.3
+description: A package to add shell command completion to your Dart application
 homepage: https://github.com/kevmoo/completion.dart
 
 environment:
