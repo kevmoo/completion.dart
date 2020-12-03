@@ -46,6 +46,9 @@ void tryCompletion(
   String scriptName;
   try {
     scriptName = p.basename(Platform.script.toFilePath());
+  } on FileSystemException {
+    // Script may not have a current working directory.
+    scriptName = '<unknown>';
   } on UnsupportedError // ignore: avoid_catching_errors
   {
     scriptName = '<unknown>';
