@@ -1,6 +1,6 @@
 *Add shell command completion to your Dart console applications.*
 
-[![Build Status](https://travis-ci.org/kevmoo/completion.dart.svg?branch=master)](https://travis-ci.org/kevmoo/completion.dart)
+[![Build Status](https://github.com/kevmoo/completion.dart/workflows/ci/badge.svg?branch=master)](https://github.com/kevmoo/completion.dart/actions?query=workflow%3A"ci"+branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/kevmoo/completion.dart/badge.svg?branch=master)](https://coveralls.io/r/kevmoo/completion.dart)
 
 To use this package, instead of this:
@@ -9,10 +9,9 @@ To use this package, instead of this:
 import 'package:args/args.dart';
 
 void main(List<String> args) {
-  ArgParser argParser = new ArgParser();
-  argParser.addFlag('option', help: 'flag help');
+  final argParser = ArgParser()..addFlag('option', help: 'flag help');
   // ... add more options ...
-  ArgResults argResults = argParser.parse(args);
+  final argResults = argParser.parse(args);
   // ...
 }
 ```
@@ -24,10 +23,9 @@ import 'package:args/args.dart';
 import 'package:completion/completion.dart' as completion;
 
 void main(List<String> args) {
-  ArgParser argParser = new ArgParser();
-  argParser.addFlag('option', help: 'flag help');
+  final argParser = ArgParser()..addFlag('option', help: 'flag help');
   // ... add more options ...
-  ArgResults argResults = completion.tryArgsCompletion(args, argParser);
+  final argResults = completion.tryArgsCompletion(args, argParser);
   // ...
 }
 ```
