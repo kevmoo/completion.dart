@@ -6,7 +6,7 @@
 To use this package, instead of this:
 
 ```dart
-import 'packages:args/args.dart';
+import 'package:args/args.dart';
 
 void main(List<String> args) {
   ArgParser argParser = new ArgParser();
@@ -20,8 +20,8 @@ void main(List<String> args) {
 do this:
 
 ```dart
-import 'packages:args/args.dart';
-import 'packages:completion/completion.dart' as completion;
+import 'package:args/args.dart';
+import 'package:completion/completion.dart' as completion;
 
 void main(List<String> args) {
   ArgParser argParser = new ArgParser();
