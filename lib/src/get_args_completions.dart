@@ -13,8 +13,6 @@ List<String> getArgsCompletions(
   String compLine,
   int compPoint,
 ) {
-  assert(parser != null);
-  assert(providedArgs != null);
   // all arg entries: no empty items, no null items, all pre-trimmed
   for (var i = 0; i < providedArgs.length; i++) {
     final arg = providedArgs[i];
@@ -65,7 +63,7 @@ List<String> getArgsCompletions(
   // all non-null, all unique
   final optionsDefinedInArgs = alignedArgsOptions
       .take(alignedArgsOptions.length - 1)
-      .where((o) => o != null)
+      .whereType<Option>()
       .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
@@ -95,13 +93,13 @@ List<String> getArgsCompletions(
   if (subsetResult != null && subsetResult.command != null) {
     // get all of the args *after* the command name
     // call in recursively with the sub command parser, right?
-    final subCommand = subsetResult.command;
-    final subCommandIndex = providedArgs.indexOf(subCommand.name);
+    final subCommand = subsetResult.command!;
+    final subCommandIndex = providedArgs.indexOf(subCommand.name!);
     assert(subCommandIndex >= 0);
     sublog('so, it seems we have command "${subCommand.name}" at '
         'index $subCommandIndex');
 
-    final subCommandParser = parser.commands[subCommand.name];
+    final subCommandParser = parser.commands[subCommand.name]!;
     final subCommandArgs = providedArgs.sublist(subCommandIndex + 1);
 
     /*
@@ -136,12 +134,12 @@ List<String> getArgsCompletions(
       final option = alignedArgsOptions[providedArgs.length - 1];
       if (option != null &&
           option.allowed != null &&
-          option.allowed.isNotEmpty) {
+          option.allowed!.isNotEmpty) {
         assert(!option.isFlag);
 
         sublog('completing all allowed value for option "${option.name}"');
 
-        return option.allowed.toList();
+        return option.allowed!.toList();
       }
     } else {
       sublog('completing the name of options starting with "$removedItem"');
@@ -159,15 +157,13 @@ List<String> getArgsCompletions(
   if (providedArgs.length >= 2) {
     final option = alignedArgsOptions[providedArgs.length - 2];
     if (option != null) {
-      if (option.allowed != null && option.allowed.isNotEmpty) {
+      if (option.allowed != null && option.allowed!.isNotEmpty) {
         assert(!option.isFlag);
         sublog('completing option "${option.name}"');
 
         final optionValue = providedArgs[providedArgs.length - 1];
 
-        return option.allowed
-            .where((String v) => v.startsWith(optionValue))
-            .toList();
+        return option.allowed!.where((v) => v.startsWith(optionValue)).toList();
       } else if (!option.isFlag) {
         sublog('not providing completions. Wating for option value');
         return const [];
@@ -221,7 +217,7 @@ List<String> getArgsCompletions(
   return const [];
 }
 
-Option _getOptionForArg(ArgParser parser, String arg) {
+Option? _getOptionForArg(ArgParser parser, String arg) {
   // could be a full arg name
   if (arg.startsWith('--')) {
     final nameOption = arg.substring(2);
@@ -235,7 +231,7 @@ Option _getOptionForArg(ArgParser parser, String arg) {
   if (arg.startsWith('--no-')) {
     final nameOption = arg.substring(5);
     final option = parser.options[nameOption];
-    if (option != null && option.negatable) {
+    if (option != null && option.negatable!) {
       return option;
     }
   }
@@ -271,7 +267,7 @@ _Tuple _validSubset(ArgParser parser, List<String> providedArgs) {
    * 2) we have no more args
    */
   final validSubSet = providedArgs.toList();
-  ArgResults subsetResult;
+  ArgResults? subsetResult;
   while (validSubSet.isNotEmpty) {
     try {
       subsetResult = parser.parse(validSubSet);
@@ -292,12 +288,12 @@ _Tuple _validSubset(ArgParser parser, List<String> providedArgs) {
 
 List<String> _argsOptionCompletions(Option option) => <String>[
       '--${option.name}',
-      if (option.negatable) '--no-${option.name}',
+      if (option.negatable!) '--no-${option.name}',
     ]..sort();
 
 class _Tuple {
   final List<String> subset;
-  final ArgResults result;
+  final ArgResults? result;
 
   const _Tuple(this.subset, this.result);
 }

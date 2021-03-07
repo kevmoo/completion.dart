@@ -29,8 +29,8 @@ void main(List<String> args) {
   }
 
   if (argResult.command != null) {
-    final subCommand = argResult.command;
-    final subCommandParser = argParser.commands[subCommand.name];
+    final subCommand = argResult.command!;
+    final subCommandParser = argParser.commands[subCommand.name]!;
 
     if (subCommand.name == 'help') {
       // so the help command was run.
@@ -40,7 +40,7 @@ void main(List<String> args) {
         // we have a sub-sub command. Fun!
         // let's get the sub-sub command parser
 
-        final subSubCommand = subCommand.command;
+        final subSubCommand = subCommand.command!;
         if (subSubCommand.name == 'assistance') {
           print('Yes, we have help for help...just calling it assistance');
           // let's print sub help. Very crazy.
@@ -69,7 +69,7 @@ void main(List<String> args) {
 
   final greeting = argResult['friendly'] as bool ? 'Hiya' : 'Hello';
 
-  final salutationVal = argResult['salutation'] as String;
+  final salutationVal = argResult['salutation'] as String?;
   final salutation = salutationVal == null ? '' : '$salutationVal ';
 
   var message = '$greeting, $salutation$name';

@@ -133,7 +133,7 @@ List<String> _getAllOptions(ArgParser parser) {
 
     list.add(_optionIze(k));
 
-    if (v.negatable) {
+    if (v.negatable!) {
       list.add(_optionIze('no-$k'));
     }
   });

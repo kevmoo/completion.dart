@@ -41,10 +41,7 @@ String generateCompletionScript(List<String> binaryNames) {
 
   final prefix =
       LineSplitter.split(_prefix).map((l) => '# $l'.trim()).join('\n');
-  buffer
-    ..writeln(prefix)
-    // empty line
-    ..writeln('');
+  buffer..writeln(prefix)..writeln();
 
   for (final binName in binaryNames) {
     buffer.writeln(_printBinName(binName));

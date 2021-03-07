@@ -10,7 +10,7 @@ class Tag {
   static int get longestTagLength => getArgsCompletions.name.length;
 }
 
-void log(Object o, [Tag tag]) {
+void log(Object o, [Tag? tag]) {
   String safe;
 
   try {
@@ -32,7 +32,7 @@ void log(Object o, [Tag tag]) {
 
 String helpfulToString(Object input) {
   if (input is Iterable) {
-    final items = input.map(helpfulToString).toList();
+    final items = input.cast<Object>().map(helpfulToString).toList();
 
     if (items.isEmpty) {
       return '-empty-';

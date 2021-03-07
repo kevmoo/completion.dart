@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Support null safety.
+
 ## 0.2.3
 
 * Prevent `tryCompletion` from crashing when looking up the script name when run
