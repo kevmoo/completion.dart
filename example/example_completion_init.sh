@@ -2,7 +2,7 @@
 # This script should not be run directly (hence, it does not have +x attribute)
 # It should be included in the current environment via
 #
-#  source hello_completion_init.sh
+#  source example_completion_init.sh
 #
 
 APP_NAME=example.dart
@@ -16,7 +16,7 @@ then
   exit 1
 fi
 
-if [ ! -f $APP_DIR/$COMPETION_NAME ]
+if [ ! -f $APP_DIR/$COMPLETION_NAME ]
 then
   echo $COMPLETION_NAME does not exist in the expected directory
   exit 1
