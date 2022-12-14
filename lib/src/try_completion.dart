@@ -21,7 +21,7 @@ void tryCompletion(
   @Deprecated('Useful for testing, but do not release with this set.')
       bool? logFile,
 }) {
-  if (logFile == true) {
+  if (logFile ?? false) {
     final logFile = File('_completion.log');
 
     void logLine(String content) {
