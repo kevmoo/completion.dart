@@ -1,6 +1,7 @@
-## 1.0.1-dev
+## 1.0.1
 
 - Require Dart 2.18.0
+- Update license.
 
 ## 1.0.0
 
