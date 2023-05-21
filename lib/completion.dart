@@ -10,7 +10,7 @@ ArgResults tryArgsCompletion(
   List<String> mainArgs,
   ArgParser parser, {
   @Deprecated('Useful for testing, but do not released with this set.')
-      bool? logFile,
+  bool? logFile,
 }) {
   tryCompletion(
     mainArgs,

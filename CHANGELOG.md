@@ -1,3 +1,7 @@
+## 1.0.2-dev
+
+- Require Dart 3.0.0
+
 ## 1.0.1
 
 - Require Dart 2.18.0

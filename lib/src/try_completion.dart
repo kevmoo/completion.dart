@@ -19,7 +19,7 @@ void tryCompletion(
   List<String> Function(List<String> args, String compLine, int compPoint)
       completer, {
   @Deprecated('Useful for testing, but do not release with this set.')
-      bool? logFile,
+  bool? logFile,
 }) {
   if (logFile ?? false) {
     final logFile = File('_completion.log');
