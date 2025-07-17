@@ -61,14 +61,16 @@ List<String> getArgsCompletions(
 
   // a set of options in use (minus, potentially, the last one)
   // all non-null, all unique
-  final optionsDefinedInArgs = alignedArgsOptions
-      .take(alignedArgsOptions.length - 1)
-      .whereType<Option>()
-      .toSet();
+  final optionsDefinedInArgs =
+      alignedArgsOptions
+          .take(alignedArgsOptions.length - 1)
+          .whereType<Option>()
+          .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
   final parserOptionCompletions = List<String>.unmodifiable(
-      _parserOptionCompletions(parser, optionsDefinedInArgs));
+    _parserOptionCompletions(parser, optionsDefinedInArgs),
+  );
 
   /*
    * KNOWN: at least one item in providedArgs last and first are now safe
@@ -96,8 +98,10 @@ List<String> getArgsCompletions(
     final subCommand = subsetResult.command!;
     final subCommandIndex = providedArgs.indexOf(subCommand.name!);
     assert(subCommandIndex >= 0);
-    sublog('so, it seems we have command "${subCommand.name}" at '
-        'index $subCommandIndex');
+    sublog(
+      'so, it seems we have command "${subCommand.name}" at '
+      'index $subCommandIndex',
+    );
 
     final subCommandParser = parser.commands[subCommand.name]!;
     final subCommandArgs = providedArgs.sublist(subCommandIndex + 1);
@@ -110,7 +114,11 @@ List<String> getArgsCompletions(
 
     if (subCommandArgs.isNotEmpty || compLine.endsWith(' ')) {
       return getArgsCompletions(
-          subCommandParser, subCommandArgs, compLine, compPoint);
+        subCommandParser,
+        subCommandArgs,
+        compLine,
+        compPoint,
+      );
     }
   }
 
@@ -248,13 +256,18 @@ Option? _getOptionForArg(ArgParser parser, String arg) {
 }
 
 Iterable<String> _parserOptionCompletions(
-    ArgParser parser, Set<Option> existingOptions) {
+  ArgParser parser,
+  Set<Option> existingOptions,
+) {
   assert(
-      existingOptions.every((option) => parser.options.containsValue(option)));
+    existingOptions.every((option) => parser.options.containsValue(option)),
+  );
 
   return parser.options.values
-      .where((opt) =>
-          !existingOptions.contains(opt) || opt.type == OptionType.multiple)
+      .where(
+        (opt) =>
+            !existingOptions.contains(opt) || opt.type == OptionType.multiple,
+      )
       .expand(_argsOptionCompletions);
 }
 
@@ -286,10 +299,9 @@ _Tuple _validSubset(ArgParser parser, List<String> providedArgs) {
   return _Tuple(validSubSet, subsetResult);
 }
 
-List<String> _argsOptionCompletions(Option option) => <String>[
-      '--${option.name}',
-      if (option.negatable!) '--no-${option.name}',
-    ]..sort();
+List<String> _argsOptionCompletions(Option option) =>
+    <String>['--${option.name}', if (option.negatable!) '--no-${option.name}']
+      ..sort();
 
 class _Tuple {
   final List<String> subset;

@@ -1,6 +1,7 @@
-## 1.0.2-wip
+## 1.0.2
 
-- Require Dart 3.4.0
+- Fix README link
+- Require Dart 3.7.0
 
 ## 1.0.1
 

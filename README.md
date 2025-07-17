@@ -1,6 +1,6 @@
 *Add shell command completion to your Dart console applications.*
 
-[![Build Status](https://github.com/kevmoo/completion.dart/workflows/ci/badge.svg?branch=master)](https://github.com/kevmoo/completion.dart/actions?query=workflow%3A"ci"+branch%3Amaster)
+[![Dart CI](https://github.com/kevmoo/completion.dart/actions/workflows/ci.yml/badge.svg)](https://github.com/kevmoo/completion.dart/actions/workflows/ci.yml)
 [![pub package](https://img.shields.io/pub/v/completion.svg)](https://pub.dev/packages/completion)
 [![package publisher](https://img.shields.io/pub/publisher/completion.svg)](https://pub.dev/packages/completion/publisher)
 

@@ -16,7 +16,8 @@ void log(Object o, [Tag? tag]) {
   try {
     safe = o.toString();
   } catch (e, stack) {
-    safe = 'Error converting provided object $o into '
+    safe =
+        'Error converting provided object $o into '
         'String\nException:\t${e}Stack:\t$stack';
   }
 
