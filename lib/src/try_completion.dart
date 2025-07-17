@@ -17,7 +17,7 @@ const _compPointVar = 'COMP_POINT';
 void tryCompletion(
   List<String> args,
   List<String> Function(List<String> args, String compLine, int compPoint)
-      completer, {
+  completer, {
   @Deprecated('Useful for testing, but do not release with this set.')
   bool? logFile,
 }) {
@@ -75,13 +75,16 @@ void tryCompletion(
       final compPointValue = env[_compPointVar];
       if (compPointValue == null || compPointValue.isEmpty) {
         throw StateError(
-            'Environment variable $_compPointVar must be set and non-empty');
+          'Environment variable $_compPointVar must be set and non-empty',
+        );
       }
       final compPoint = int.tryParse(compPointValue);
 
       if (compPoint == null) {
-        throw FormatException('Could not parse $_compPointVar value '
-            '"$compPointValue" into an integer');
+        throw FormatException(
+          'Could not parse $_compPointVar value '
+          '"$compPointValue" into an integer',
+        );
       }
 
       final trimmedArgs = args.sublist(3);

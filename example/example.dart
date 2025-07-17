@@ -48,7 +48,8 @@ void main(List<String> args) {
           return;
         } else {
           throw StateError(
-              'no clue what that subCammand is: ${subSubCommand.name}');
+            'no clue what that subCammand is: ${subSubCommand.name}',
+          );
         }
       }
       // one sub-sub command: help. Really.

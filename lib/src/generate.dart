@@ -31,7 +31,8 @@ String generateCompletionScript(List<String> binaryNames) {
 
   for (final binName in binaryNames) {
     if (!_binNameMatch.hasMatch(binName)) {
-      final msg = 'The provided name - "$binName" - is invalid\n'
+      final msg =
+          'The provided name - "$binName" - is invalid\n'
           'It must match regex: ${_binNameMatch.pattern}';
       throw StateError(msg);
     }
@@ -39,8 +40,9 @@ String generateCompletionScript(List<String> binaryNames) {
 
   final buffer = StringBuffer();
 
-  final prefix =
-      LineSplitter.split(_prefix).map((l) => '# $l'.trim()).join('\n');
+  final prefix = LineSplitter.split(
+    _prefix,
+  ).map((l) => '# $l'.trim()).join('\n');
   buffer
     ..writeln(prefix)
     ..writeln();
@@ -49,9 +51,7 @@ String generateCompletionScript(List<String> binaryNames) {
     buffer.writeln(_printBinName(binName));
   }
 
-  final detailLines = [
-    'Generated ${DateTime.now().toUtc()}',
-  ];
+  final detailLines = ['Generated ${DateTime.now().toUtc()}'];
 
   if (Platform.script.scheme == 'file') {
     var scriptPath = Platform.script.toFilePath();

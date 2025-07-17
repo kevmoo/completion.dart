@@ -17,19 +17,22 @@ void main() {
   });
 
   test('basic completion', () async {
-    final process = await TestProcess.start(dartPath,
-        [_exampleFilePath, 'completion', '--', _exampleFileName, '--'],
-        environment: {'COMP_POINT': '15', 'COMP_LINE': '$_exampleFileName --'});
+    final process = await TestProcess.start(
+      dartPath,
+      [_exampleFilePath, 'completion', '--', _exampleFileName, '--'],
+      environment: {'COMP_POINT': '15', 'COMP_LINE': '$_exampleFileName --'},
+    );
 
     await expectLater(
-        process.stdout,
-        emitsInAnyOrder([
-          '--friendly',
-          '--loud',
-          '--no-loud',
-          '--salutation',
-          '--middle-name',
-        ]));
+      process.stdout,
+      emitsInAnyOrder([
+        '--friendly',
+        '--loud',
+        '--no-loud',
+        '--salutation',
+        '--middle-name',
+      ]),
+    );
 
     await process.shouldExit(0);
   });
