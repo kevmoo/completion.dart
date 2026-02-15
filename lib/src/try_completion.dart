@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import 'util.dart';
@@ -14,13 +15,39 @@ const String completionCommandName = 'completion';
 
 const _compPointVar = 'COMP_POINT';
 
-void tryCompletion(
+/// Try to complete the given [args].
+///
+/// If the arguments indicate that completion is being requested, then the
+/// [completer] function is called to generate the list of possible
+/// completions. If the [completer] returns a non-empty list, then each
+/// completion is printed to standard output, one per line. In this case, the
+/// function returns the exit code 0. If the [completer] returns an empty list,
+/// the function returns the exit code 1.
+///
+/// If the arguments do not indicate that completion is being requested, then
+/// the function returns `null`.
+///
+/// The optional [logFile] parameter is used to log information about the
+/// completion process. This is useful for debugging, but should not be enabled
+/// in production code.
+int? tryCompletion(
   List<String> args,
   List<String> Function(List<String> args, String compLine, int compPoint)
   completer, {
   @Deprecated('Useful for testing, but do not release with this set.')
   bool? logFile,
+}) => tryCompletionImpl(args, completer, logFile: logFile);
+
+@internal
+int? tryCompletionImpl(
+  List<String> args,
+  List<String> Function(List<String> args, String compLine, int compPoint)
+  completer, {
+  @Deprecated('Useful for testing, but do not release with this set.')
+  bool? logFile,
+  Map<String, String>? environment,
 }) {
+  environment ??= Platform.environment;
   if (logFile ?? false) {
     final logFile = File('_completion.log');
 
@@ -61,18 +88,16 @@ void tryCompletion(
       log('All args: $args');
       log('completion-reported exe: ${args[2]}');
 
-      final env = Platform.environment;
-
       // There are 3 interesting env parameters passed by the completion logic
       // COMP_LINE:  the full contents of the completion
-      final compLine = env['COMP_LINE'];
+      final compLine = environment['COMP_LINE'];
       if (compLine == null) {
         throw StateError('Environment variable COMP_LINE must be set');
       }
 
       // COMP_CWORD: number of words. Also might be nice
       // COMP_POINT: where the cursor is on the completion line
-      final compPointValue = env[_compPointVar];
+      final compPointValue = environment[_compPointVar];
       if (compPointValue == null || compPointValue.isEmpty) {
         throw StateError(
           'Environment variable $_compPointVar must be set and non-empty',
@@ -98,14 +123,15 @@ void tryCompletion(
       for (final comp in completions) {
         print(comp);
       }
-      exit(0);
+      return 0;
     } catch (ex, stack) {
       log('An error occurred while attemping completion');
       log(ex);
       log(stack);
-      exit(1);
+      return 1;
     }
   }
 
   log('Completion params not found');
+  return null;
 }

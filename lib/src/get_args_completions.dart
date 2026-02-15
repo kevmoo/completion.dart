@@ -1,12 +1,15 @@
 import 'package:args/args.dart';
+import 'package:meta/meta.dart';
 
 import 'util.dart';
 
-/*
- * TODO: an interesting scenario: if there is only one subcommand,
- *       then tabbing into an app just completes to that one command. Weird?
- */
-
+/// Returns a list of possible completions for the given arguments.
+///
+/// [parser] is the [ArgParser] to use for parsing the arguments.
+/// [providedArgs] are the arguments to complete.
+/// [compLine] is the current command line.
+/// [compPoint] is the current position in the command line.
+@internal
 List<String> getArgsCompletions(
   ArgParser parser,
   List<String> providedArgs,
@@ -45,8 +48,9 @@ List<String> getArgsCompletions(
     return parser.commands.keys.toList();
   }
 
-  final alignedArgsOptions =
-      providedArgs.map((arg) => _getOptionForArg(parser, arg)).toList();
+  final alignedArgsOptions = providedArgs
+      .map((arg) => _getOptionForArg(parser, arg))
+      .toList();
 
   /*
    * NOTE: nuanced behavior
@@ -61,11 +65,10 @@ List<String> getArgsCompletions(
 
   // a set of options in use (minus, potentially, the last one)
   // all non-null, all unique
-  final optionsDefinedInArgs =
-      alignedArgsOptions
-          .take(alignedArgsOptions.length - 1)
-          .whereType<Option>()
-          .toSet();
+  final optionsDefinedInArgs = alignedArgsOptions
+      .take(alignedArgsOptions.length - 1)
+      .whereType<Option>()
+      .toSet();
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
   final parserOptionCompletions = List<String>.unmodifiable(
@@ -271,7 +274,10 @@ Iterable<String> _parserOptionCompletions(
       .expand(_argsOptionCompletions);
 }
 
-_Tuple _validSubset(ArgParser parser, List<String> providedArgs) {
+({List<String> subset, ArgResults? result}) _validSubset(
+  ArgParser parser,
+  List<String> providedArgs,
+) {
   /* start with all of the args, loop through parsing them,
    * removing one every time
    *
@@ -296,16 +302,9 @@ _Tuple _validSubset(ArgParser parser, List<String> providedArgs) {
     validSubSet.removeLast();
   }
 
-  return _Tuple(validSubSet, subsetResult);
+  return (subset: validSubSet, result: subsetResult);
 }
 
 List<String> _argsOptionCompletions(Option option) =>
     <String>['--${option.name}', if (option.negatable!) '--no-${option.name}']
       ..sort();
-
-class _Tuple {
-  final List<String> subset;
-  final ArgResults? result;
-
-  const _Tuple(this.subset, this.result);
-}
