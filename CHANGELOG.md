@@ -1,3 +1,14 @@
+## 2.0.0-wip
+
+- **BREAKING** `tryCompletion` no longer calls `exit()`. Instead, it returns an
+  `int?` which is the exit code. A value of `null` indicates that the arguments
+  provided did not trigger completion. Callers must now handle the return value.
+- **BREAKING** The output of `generateCompletionScript` has been rewritten to
+  support generating scripts for specific shells.
+- Added `Shell` enum and `shells` argument to `generateCompletionScript` to
+  allow selecting which shells to generate scripts for.
+- Require Dart 3.10
+
 ## 1.0.2
 
 - Fix README link
