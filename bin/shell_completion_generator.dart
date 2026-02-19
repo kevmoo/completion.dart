@@ -19,26 +19,14 @@ void main(List<String> arguments) {
   try {
     results = parser.parse(arguments);
   } on FormatException catch (e) {
-    stderr.writeln(e.message);
-    stderr.writeln();
-    stderr.writeln(
-      'Usage: shell_completion_generator [options] <binary_names>',
-    );
-    stderr.writeln(parser.usage);
-    exitCode = 1;
+    _handleError(parser, e.message);
     return;
   }
 
   final binaryNames = results.rest;
 
   if (binaryNames.isEmpty) {
-    stderr.writeln('Provide the name of at least one command.');
-    stderr.writeln();
-    stderr.writeln(
-      'Usage: shell_completion_generator [options] <binary_names>',
-    );
-    stderr.writeln(parser.usage);
-    exitCode = 1;
+    _handleError(parser, 'Provide the name of at least one command.');
     return;
   }
 
@@ -51,4 +39,12 @@ void main(List<String> arguments) {
     stderr.writeln(e);
     exitCode = 1;
   }
+}
+
+void _handleError(ArgParser parser, String message) {
+  stderr.writeln(message);
+  stderr.writeln();
+  stderr.writeln('Usage: shell_completion_generator [options] <binary_names>');
+  stderr.writeln(parser.usage);
+  exitCode = 1;
 }
