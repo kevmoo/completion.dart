@@ -8,6 +8,11 @@
 - Added `Shell` enum and `shells` argument to `generateCompletionScript` to
   allow selecting which shells to generate scripts for.
 - Require Dart 3.10
+- Added heuristic subcommand detection to `getArgsCompletions`. When parsing
+  fails due to invalid arguments (e.g. typos, partially typed flags), the
+  system now attempts to identify known subcommands later in the argument list.
+  This allows completion to recover and provide suggestions for valid subcommands
+  even when earlier parts of the command line are incorrect.
 
 ## 1.0.2
 

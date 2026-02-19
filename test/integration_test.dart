@@ -36,4 +36,17 @@ void main() {
 
     await process.shouldExit(0);
   });
+
+  test('heuristic completion - --unknown help', () async {
+    const compLine = '$_exampleFileName --unknown help ';
+    final process = await TestProcess.start(
+      dartPath,
+      [_exampleFilePath, 'completion', '--', ...compLine.trim().split(' ')],
+      environment: {'COMP_POINT': '${compLine.length}', 'COMP_LINE': compLine},
+    );
+
+    await expectLater(process.stdout, emits('assistance'));
+
+    await process.shouldExit(0);
+  });
 }

@@ -10,143 +10,136 @@ void main() {
 
     final allOptions = _getAllOptions(parser);
 
-    final pairs = [
-      _CompletionSet(
+    final pairs = <_CompletionSet>[
+      (
         'empty input, just give all the commands',
         [],
         parser.commands.keys.toList(),
       ),
-      _CompletionSet('just a dash: should be empty. Vague', ['-'], []),
-      _CompletionSet('double-dash, give all the options', ['--'], allOptions),
-      _CompletionSet(
-        '+flag complete --frie to --friendly',
-        ['--frie'],
-        ['--friendly'],
-      ),
-      _CompletionSet(
+      ('just a dash: should be empty. Vague', ['-'], []),
+      ('double-dash, give all the options', ['--'], allOptions),
+      ('+flag complete --frie to --friendly', ['--frie'], ['--friendly']),
+      (
         '+flag complete full, final option to itself',
         ['--friendly'],
         ['--friendly'],
       ),
-      _CompletionSet(
+      (
         "+command starting to complete 'help' - finish with help",
         ['he'],
         ['help'],
       ),
-      _CompletionSet(
-        "+command all of 'help' - finish with help",
-        ['help'],
-        ['help'],
-      ),
-      _CompletionSet('too much', ['helpp'], []),
-      _CompletionSet('wrong case', ['Help'], []),
-      _CompletionSet(
-        "+command complete 'assistance'",
-        ['help', 'assist'],
-        ['assistance'],
-      ),
-      _CompletionSet(
-        'show the yell flag for help',
-        ['help', '--'],
-        ['--yell', '--no-yell'],
-      ),
-      _CompletionSet(
+      ("+command all of 'help' - finish with help", ['help'], ['help']),
+      ('too much', ['helpp'], []),
+      ('wrong case', ['Help'], []),
+      ("+command complete 'assistance'", ['help', 'assist'], ['assistance']),
+      ('show the yell flag for help', ['help', '--'], ['--yell', '--no-yell']),
+      (
         "+command help - complete '--n' to '--no-yell'",
         ['help', '--n'],
         ['--no-yell'],
       ),
-      _CompletionSet(
+      (
         '+command help has sub-command - assistance',
         ['help', ''],
         ['assistance'],
       ),
-      _CompletionSet(
+      (
         "+flag don't offer --friendly twice",
         ['--friendly', '--'],
         ['--loud', '--no-loud', '--salutation', '--middle-name'],
       ),
-      _CompletionSet(
+      (
         "+abbr+flag+no-multiple don't offer --friendly twice, even if the "
-        'first one is the abbreviation',
+            'first one is the abbreviation',
         ['-f', '--'],
         ['--loud', '--no-loud', '--salutation', '--middle-name'],
       ),
-      _CompletionSet("+flag+no-multiple don't complete a second --friendly", [
-        '--friendly',
-        '--friend',
-      ], []),
-      _CompletionSet(
+      (
+        "+flag+no-multiple don't complete a second --friendly",
+        ['--friendly', '--friend'],
+        [],
+      ),
+      (
         "+abbr+flag+no-multiple don't complete a second --friendly, even if "
-        'the first one is the abbreviation',
+            'the first one is the abbreviation',
         ['-f', '--friend'],
         [],
       ),
-      _CompletionSet(
+      (
         "+flag+negatable+no-multiple don't complete the opposite of a "
-        'negatable - 1',
+            'negatable - 1',
         ['--no-loud', '--'],
         ['--friendly', '--salutation', '--middle-name'],
       ),
-      _CompletionSet(
+      (
         "+flag+negatable+no-multiple don't complete the opposite of a "
-        'negatable - 2',
+            'negatable - 2',
         ['--loud', '--'],
         ['--friendly', '--salutation', '--middle-name'],
       ),
-      _CompletionSet(
+      (
         "+option+no-allowed+multiple okay to have multiple 'multiple' options",
         ['--middle-name', 'Robert', '--'],
         allOptions,
       ),
-      _CompletionSet(
+      (
         "+option+no-allowed+multiple okay to have multiple 'multiple' "
-        'options, even abbreviations',
+            'options, even abbreviations',
         ['-m', '"John Davis"', '--'],
         allOptions,
       ),
-      _CompletionSet(
+      (
         "+option+no-allowed don't suggest if an option is waiting for a value",
         ['--middle-name', ''],
         [],
       ),
-      _CompletionSet(
+      (
         "+abbr+option+no-allowed don't suggest if an option is waiting for a "
-        'value',
+            'value',
         ['-m', ''],
         [],
       ),
-      _CompletionSet(
+      (
         '+option+allowed suggest completions for an option with allowed '
-        'defined',
+            'defined',
         ['--salutation', ''],
         ['Mr', 'Mrs', 'Dr', 'Ms'],
       ),
-      _CompletionSet(
+      (
         '+option+allowed finish a completion for an option (added via abbr) '
-        'with allowed defined',
+            'with allowed defined',
         ['-s', 'M'],
         ['Mr', 'Mrs', 'Ms'],
       ),
-      _CompletionSet("+abbr+option+allowed don't finish a bad completion", [
-        '-s',
-        'W',
-      ], []),
-      _CompletionSet(
-        '+abbr+option+allowed confirm a completion',
-        ['-s', 'Dr'],
-        ['Dr'],
-      ),
-      _CompletionSet(
+      ("+abbr+option+allowed don't finish a bad completion", ['-s', 'W'], []),
+      ('+abbr+option+allowed confirm a completion', ['-s', 'Dr'], ['Dr']),
+      (
         '+abbr+option+allowed back to command completion after a completed '
-        'option',
+            'option',
         ['-s', 'Dr', ''],
         ['help'],
       ),
-      _CompletionSet(
+      (
         '+abbr+option+allowed back to option completion after a completed '
-        'option',
+            'option',
         ['-s', 'Dr', '--'],
         ['--friendly', '--loud', '--no-loud', '--middle-name'],
+      ),
+      (
+        'heuristic: --unknown help -> suggest assistance',
+        ['--unknown', 'help', ''],
+        ['assistance'],
+      ),
+      (
+        'heuristic: --unknown help -- -> suggest flags',
+        ['--unknown', 'help', '--'],
+        ['--yell', '--no-yell'],
+      ),
+      (
+        'heuristic: --unknown help ass -> suggest assistance',
+        ['--unknown', 'help', 'ass'],
+        ['assistance'],
       ),
     ];
 
@@ -158,13 +151,12 @@ void main() {
       _testCompletionPair(parser, args, [], compLine, compLine.length - 1);
     });
 
-    for (var p in pairs) {
-      final compLine = p.args.join(' ');
+    for (final (description, args, suggestions) in pairs) {
+      final compLine = args.join(' ');
       final compPoint = compLine.length;
-      final args = p.args.toList();
 
-      test(p.description, () {
-        _testCompletionPair(parser, args, p.suggestions, compLine, compPoint);
+      test(description, () {
+        _testCompletionPair(parser, args, suggestions, compLine, compPoint);
       });
     }
   });
@@ -206,10 +198,8 @@ void _testCompletionPair(
   );
 }
 
-class _CompletionSet {
-  final String description;
-  final List<String> args;
-  final List<String> suggestions;
-
-  _CompletionSet(this.description, this.args, this.suggestions);
-}
+typedef _CompletionSet = (
+  String description,
+  List<String> args,
+  List<String> suggestions,
+);
