@@ -123,6 +123,33 @@ List<String> getArgsCompletions(
         compPoint,
       );
     }
+  } else {
+    // If we didn't find a command in the valid subset, maybe there is one
+    // in the parts that didn't parse?
+    // We'll scan specifically for a command that matches.
+    // We want the *first* one we find? Or the last?
+    // Usually the first one is the winner.
+
+    // heuristic: find a known command in args, assume it is the command
+    // and just pass the rest of the args to it.
+    // We only do this if we *failed* to parse a command normally.
+
+    for (var i = validSubSet.length; i < providedArgs.length; i++) {
+      final arg = providedArgs[i];
+      if (parser.commands.containsKey(arg)) {
+        sublog('found heuristic command "$arg" at index $i');
+        final subCommandParser = parser.commands[arg]!;
+        final subCommandArgs = providedArgs.sublist(i + 1);
+        if (subCommandArgs.isNotEmpty || compLine.endsWith(' ')) {
+          return getArgsCompletions(
+            subCommandParser,
+            subCommandArgs,
+            compLine,
+            compPoint,
+          );
+        }
+      }
+    }
   }
 
   final removedItems = providedArgs.sublist(validSubSet.length);
@@ -274,35 +301,36 @@ Iterable<String> _parserOptionCompletions(
       .expand(_argsOptionCompletions);
 }
 
+/// Returns the largest subset of [providedArgs] that can be parsed by [parser].
+///
+/// This is used to determine the state of the parser (options, commands)
+/// up to the point of failure.
 ({List<String> subset, ArgResults? result}) _validSubset(
   ArgParser parser,
   List<String> providedArgs,
 ) {
-  /* start with all of the args, loop through parsing them,
-   * removing one every time
-   *
-   * Util:
-   * 1) we have a valid ArgsResult
-   * 2) we have no more args
-   */
+  // Try to parse the longest possible prefix of args.
+  // We start with all args and shrink from the end.
   final validSubSet = providedArgs.toList();
-  ArgResults? subsetResult;
+
   while (validSubSet.isNotEmpty) {
     try {
-      subsetResult = parser.parse(validSubSet);
-      break;
-    } on FormatException catch (_) {
-      //_log('tried to parse subset $validSubSet');
-      //_log('error:\t$ex');
-      // I guess that won't parse
+      final result = parser.parse(validSubSet);
+      return (subset: validSubSet, result: result);
+    } on FormatException {
+      // Ignore error, try a smaller subset
     }
-
-    // TODO: other ways this could fail? Hmm...
-
     validSubSet.removeLast();
   }
 
-  return (subset: validSubSet, result: subsetResult);
+  // Even empty args should parse (unless required options are missing, but
+  // ArgParser usually allows empty).
+  // If even empty fails (e.g. strict required options?), we return null result.
+  try {
+    return (subset: validSubSet, result: parser.parse(validSubSet));
+  } on FormatException {
+    return (subset: validSubSet, result: null);
+  }
 }
 
 List<String> _argsOptionCompletions(Option option) =>
