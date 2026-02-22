@@ -208,7 +208,7 @@ def "{{funcName}}" [context: string, offset: int] {
     COMP_LINE: $context,
     COMP_POINT: ($offset | into string)
   } {
-    {{binName}} completion -- ...$final_words | lines
+    ^{{binName}} completion -- ...$final_words | lines
   }
 }
 
