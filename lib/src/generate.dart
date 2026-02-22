@@ -198,21 +198,30 @@ fi
 ''';
 
 const _nushellTemplate = r'''
-def "{{funcName}}" [context: string, offset: int] {
-  let cursor_str = ($context | str substring ..$offset)
-  let is_trailing_space = ($cursor_str | str ends-with " ")
-  let words = ($cursor_str | split row ' ' | where { |it| $it != "" })
-  let final_words = if $is_trailing_space { $words | append "" } else { $words }
+let existing_completer = ($env.config?.completions?.external?.completer? | default null)
 
-  with-env {
-    COMP_LINE: $context,
-    COMP_POINT: ($offset | into string)
-  } {
-    ^{{binName}} completion -- ...$final_words | lines
-  }
+let {{funcName}} = {|spans|
+    if ($spans | first) == "{{binName}}" {
+        let context = ($spans | str join " ")
+        let offset = ($context | str length)
+        
+        with-env {
+            COMP_LINE: $context,
+            COMP_POINT: ($offset | into string)
+        } {
+            ^{{binName}} completion -- ...$spans | lines
+        }
+    } else if $existing_completer != null {
+        do $existing_completer $spans
+    } else {
+        null
+    }
 }
 
-export extern "{{binName}}" [
-  ...args: string@"{{funcName}}"
-]
+mut current = (($env | default {} config).config | default {} completions)
+$current.completions = ($current.completions | default {} external)
+$current.completions.external = ($current.completions.external | default true enable)
+$current.completions.external.completer = ${{funcName}}
+
+$env.config = $current
 ''';

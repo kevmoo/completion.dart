@@ -32,8 +32,13 @@ void main() {
     expect(script, isNot(contains('###-for-zsh-###')));
     expect(script, isNot(contains('###-for-fish-###')));
     expect(script, contains('###-for-nushell-###'));
-    expect(script, contains('def "__my_app_completion"'));
-    expect(script, contains('export extern "my_app"'));
+    expect(script, contains('let __my_app_completion = {|spans|'));
+    expect(
+      script,
+      contains(
+        r'$current.completions.external.completer = $__my_app_completion',
+      ),
+    );
     expect(script, contains('###-end-my_app-completion-###'));
   });
 }
