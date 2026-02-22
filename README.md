@@ -38,6 +38,6 @@ to complete arguments.
 
 To generate the setup script automatically, call `generateCompletionScript`
 with the names of the executables that your Dart script runs as (typically
-just one, but it could be more).
+just one, but it could be more), along with the target `Shell`.
 
 Also, see [the example](./example).
