@@ -4,9 +4,7 @@
   `int?` which is the exit code. A value of `null` indicates that the arguments
   provided did not trigger completion. Callers must now handle the return value.
 - **BREAKING** The output of `generateCompletionScript` has been rewritten to
-  generate a script for a single shell at a time.
-- **BREAKING** Added `Shell` enum and required `shell` argument to
-  `generateCompletionScript` to select which shell to generate a script for.
+  generate a script for a single shell at a time, and now requires a `shell` argument to select which shell to generate a script for.
 - Require Dart 3.10
 - Added heuristic subcommand detection to `getArgsCompletions`. When parsing
   fails due to invalid arguments (e.g. typos, partially typed flags), the
