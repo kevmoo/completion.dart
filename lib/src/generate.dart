@@ -23,18 +23,19 @@ final _binNameMatch = RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
 
 /// The shells that we support completion generation for.
 enum Shell {
-  bash(_bashTemplate),
-  zsh(_zshTemplate),
-  fish(_fishTemplate),
-  nushell(_nushellTemplate);
+  bash(_bashTemplate, _bashInstallation),
+  zsh(_zshTemplate, _zshInstallation),
+  fish(_fishTemplate, _fishInstallation),
+  nushell(_nushellTemplate, _nushellInstallation);
 
   /// Parse a shell name from a string.
   static Shell? parse(String name) =>
       Shell.values.where((e) => e.name == name).singleOrNull;
 
-  const Shell(this.template);
+  const Shell(this.template, this.installation);
 
   final String template;
+  final String installation;
 }
 
 /// Generate a completion script for the given [binaryNames] and [shell].
@@ -63,7 +64,7 @@ String generateCompletionScript(
   final buffer = StringBuffer();
 
   final prefix = LineSplitter.split(
-    _prefix,
+    shell.installation,
   ).map((l) => '# $l'.trim()).join('\n');
   buffer
     ..writeln(prefix)
@@ -106,27 +107,52 @@ String _printBinName(String binName, Shell shell) {
   return buffer.toString();
 }
 
-const _prefix = '''
+const _bashInstallation = '''
 
 Installation:
 
-Via shell config file  ~/.bashrc  (or ~/.zshrc)
+Via shell config file  ~/.bashrc  (or ~/.bash_profile)
 
   Append the contents to config file
   'source' the file in the config file
-
-Via fish config file  ~/.config/fish/config.fish
-
-  Append the contents to config file
-
-Via nushell config file  ~/.config/nushell/env.nu
-
-  Append the contents to config file
 
 You may also have a directory on your system that is configured
    for completion files, such as:
 
    /usr/local/etc/bash_completion.d/
+''';
+
+const _zshInstallation = '''
+
+Installation:
+
+Via shell config file  ~/.zshrc
+
+  Append the contents to config file
+  'source' the file in the config file
+
+You may also have a directory on your system that is configured
+   for completion files, such as:
+
+   /usr/local/share/zsh/site-functions/
+''';
+
+const _fishInstallation = '''
+
+Installation:
+
+Via fish config file  ~/.config/fish/config.fish
+
+  Append the contents to config file
+''';
+
+const _nushellInstallation = '''
+
+Installation:
+
+Via nushell config file  ~/.config/nushell/env.nu
+
+  Append the contents to config file
 ''';
 
 const _bashTemplate = r'''
