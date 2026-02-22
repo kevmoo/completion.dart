@@ -25,7 +25,8 @@ final _binNameMatch = RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
 enum Shell {
   bash(_bashTemplate),
   zsh(_zshTemplate),
-  fish(_fishTemplate);
+  fish(_fishTemplate),
+  nushell(_nushellTemplate);
 
   /// Parse a shell name from a string.
   static Shell? parse(String name) =>
@@ -118,6 +119,10 @@ Via fish config file  ~/.config/fish/config.fish
 
   Append the contents to config file
 
+Via nushell config file  ~/.config/nushell/env.nu
+
+  Append the contents to config file
+
 You may also have a directory on your system that is configured
    for completion files, such as:
 
@@ -164,4 +169,24 @@ const _fishTemplate = '''
 if type complete &>/dev/null && [ (complete -c {{binName}} | wc -l) -eq 0 ]; then
   complete -c {{binName}} -f -a "({{binName}} completion -- (commandline -opc) (commandline -t))"
 fi
+''';
+
+const _nushellTemplate = r'''
+def "{{funcName}}" [context: string, offset: int] {
+  let cursor_str = ($context | str substring ..$offset)
+  let is_trailing_space = ($cursor_str | str ends-with " ")
+  let words = ($cursor_str | split row ' ' | where { |it| $it != "" })
+  let final_words = if $is_trailing_space { $words | append "" } else { $words }
+
+  with-env {
+    COMP_LINE: $context,
+    COMP_POINT: ($offset | into string)
+  } {
+    {{binName}} completion -- ...$final_words | lines
+  }
+}
+
+export extern "{{binName}}" [
+  ...args: string@"{{funcName}}"
+]
 ''';

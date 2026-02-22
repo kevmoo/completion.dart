@@ -5,6 +5,7 @@
   provided did not trigger completion. Callers must now handle the return value.
 - **BREAKING** The output of `generateCompletionScript` has been rewritten to
   generate a script for a single shell at a time, and now requires a `shell` argument to select which shell to generate a script for.
+- Add support for Nushell (`nushell`) completion generation.
 - Require Dart 3.10
 - Added heuristic subcommand detection to `getArgsCompletions`. When parsing
   fails due to invalid arguments (e.g. typos, partially typed flags), the
