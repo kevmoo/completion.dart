@@ -36,16 +36,15 @@ enum Shell {
   final String template;
 }
 
-/// Generate a completion script for the given [binaryNames] and [shells].
+/// Generate a completion script for the given [binaryNames] and [shell].
 ///
 /// [binaryNames] is the list of binary names to generate completion scripts
 /// for.
 ///
-/// [shells] is the set of shells to generate completion scripts for. If not
-/// provided, completion scripts will be generated for all shells.
+/// [shell] is the shell to generate a completion script for.
 String generateCompletionScript(
   List<String> binaryNames, {
-  Set<Shell>? shells,
+  required Shell shell,
 }) {
   if (binaryNames.isEmpty) {
     throw ArgumentError('Provide the name of at least of one command');
@@ -70,7 +69,7 @@ String generateCompletionScript(
     ..writeln();
 
   for (final binName in binaryNames) {
-    buffer.writeln(_printBinName(binName, shells ?? Shell.values));
+    buffer.writeln(_printBinName(binName, shell));
   }
 
   final detailLines = ['Generated ${DateTime.now().toUtc()}'];
@@ -88,20 +87,18 @@ String generateCompletionScript(
   return buffer.toString();
 }
 
-String _printBinName(String binName, Iterable<Shell> shells) {
+String _printBinName(String binName, Shell shell) {
   var funcName = binName.replaceAll('.', '_');
   funcName = '__${funcName}_completion';
 
   final buffer = StringBuffer()..writeln('###-begin-$binName-completion-###');
 
-  for (var shell in shells) {
-    buffer.writeln('###-for-${shell.name}-###');
-    buffer.writeln(
-      shell.template
-          .replaceAll(_binNameReplacement, binName)
-          .replaceAll(_funcNameReplacement, funcName),
-    );
-  }
+  buffer.writeln('###-for-${shell.name}-###');
+  buffer.writeln(
+    shell.template
+        .replaceAll(_binNameReplacement, binName)
+        .replaceAll(_funcNameReplacement, funcName),
+  );
 
   buffer.writeln('###-end-$binName-completion-###');
 

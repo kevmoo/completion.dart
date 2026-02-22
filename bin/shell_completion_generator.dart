@@ -7,12 +7,11 @@ import 'package:completion/completion.dart';
 
 void main(List<String> arguments) {
   final parser = ArgParser()
-    ..addMultiOption(
+    ..addOption(
       'shell',
       abbr: 's',
-      help: 'The shells to generate completion scripts for.',
+      help: 'The shell to generate a completion script for.',
       allowed: Shell.values.map((e) => e.name).toList(),
-      defaultsTo: Shell.values.map((e) => e.name).toList(),
     );
 
   ArgResults results;
@@ -30,11 +29,15 @@ void main(List<String> arguments) {
     return;
   }
 
-  final shellNames = results['shell'] as List<String>;
-  final shells = shellNames.map((name) => Shell.parse(name)!).toSet();
+  final shellName = results['shell'] as String?;
+  if (shellName == null) {
+    _handleError(parser, 'Provide a target shell.');
+    return;
+  }
+  final shell = Shell.parse(shellName)!;
 
   try {
-    print(generateCompletionScript(binaryNames, shells: shells));
+    print(generateCompletionScript(binaryNames, shell: shell));
   } catch (e) {
     stderr.writeln(e);
     exitCode = 1;
