@@ -4,14 +4,19 @@
   `int?` which is the exit code. A value of `null` indicates that the arguments
   provided did not trigger completion. Callers must now handle the return value.
 - **BREAKING** The output of `generateCompletionScript` has been rewritten to
-  generate a script for a single shell at a time, and now requires a `shell` argument to select which shell to generate a script for.
+  generate a script for a single shell at a time, and now requires a `shell`
+  argument to select which shell to generate a script for.
+- **BREAKING** Default completion behavior now excludes options marked as
+  `hide: true`.
 - Add support for Nushell (`nushell`) completion generation.
 - Require Dart 3.10
+- Added `includeHidden` parameter to `tryArgsCompletion` and
+  `getArgsCompletions` to allow opting into showing hidden items.
 - Added heuristic subcommand detection to `getArgsCompletions`. When parsing
   fails due to invalid arguments (e.g. typos, partially typed flags), the
   system now attempts to identify known subcommands later in the argument list.
-  This allows completion to recover and provide suggestions for valid subcommands
-  even when earlier parts of the command line are incorrect.
+  This allows completion to recover and provide suggestions for valid
+  subcommands even when earlier parts of the command line are incorrect.
 
 ## 1.0.2
 
