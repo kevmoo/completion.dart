@@ -131,12 +131,10 @@ $env.config = (do {
         }
     }
 
-    mut current = (($env | default {} config).config | default {} completions)
-    $current.completions = ($current.completions | default {} external)
-    $current.completions.external = ($current.completions.external | default true enable)
-    $current.completions.external.completer = ${{funcName}}
-
-    $current
+    mut config = ($env.config | default {})
+    $config = ($config | upsert completions.external.enable true)
+    $config.completions.external.completer = ${{funcName}}
+    $config
 })
 ''',
   );

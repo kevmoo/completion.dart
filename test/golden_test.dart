@@ -33,10 +33,17 @@ void main() {
     expect(script, isNot(contains('###-for-fish-###')));
     expect(script, contains('###-for-nushell-###'));
     expect(script, contains('let __my_app_completion = {|spans|'));
+    expect(script, contains(r'mut config = ($env.config | default {})'));
     expect(
       script,
       contains(
-        r'$current.completions.external.completer = $__my_app_completion',
+        r'$config = ($config | upsert completions.external.enable true)',
+      ),
+    );
+    expect(
+      script,
+      contains(
+        r'$config.completions.external.completer = $__my_app_completion',
       ),
     );
     expect(script, contains('###-end-my_app-completion-###'));
