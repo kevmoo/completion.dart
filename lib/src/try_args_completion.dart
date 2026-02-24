@@ -16,16 +16,25 @@ import 'try_completion.dart';
 ///
 /// [logFile] is a deprecated argument that is useful for testing, but should
 /// not be used in production code.
+///
+/// If [includeHidden] is `true`, options and commands marked as hidden will be
+/// included in the completion suggestions.
 ArgResults tryArgsCompletion(
   List<String> mainArgs,
   ArgParser parser, {
   @Deprecated('Useful for testing, but do not released with this set.')
   bool? logFile,
+  bool includeHidden = false,
 }) {
   final suggestedExitCode = tryCompletionImpl(
     mainArgs,
-    (List<String> args, String compLine, int compPoint) =>
-        getArgsCompletions(parser, args, compLine, compPoint),
+    (List<String> args, String compLine, int compPoint) => getArgsCompletions(
+      parser,
+      args,
+      compLine,
+      compPoint,
+      includeHidden: includeHidden,
+    ),
     // ignore: deprecated_member_use_from_same_package,deprecated_member_use
     logFile: logFile,
   );

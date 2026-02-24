@@ -9,13 +9,17 @@ import 'util.dart';
 /// [providedArgs] are the arguments to complete.
 /// [compLine] is the current command line.
 /// [compPoint] is the current position in the command line.
+///
+/// If [includeHidden] is `true`, options and commands marked as hidden will be
+/// included in the completion suggestions.
 @internal
 List<String> getArgsCompletions(
   ArgParser parser,
   List<String> providedArgs,
   String compLine,
-  int compPoint,
-) {
+  int compPoint, {
+  bool includeHidden = false,
+}) {
   // all arg entries: no empty items, no null items, all pre-trimmed
   for (var i = 0; i < providedArgs.length; i++) {
     final arg = providedArgs[i];
@@ -72,7 +76,11 @@ List<String> getArgsCompletions(
   sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
 
   final parserOptionCompletions = List<String>.unmodifiable(
-    _parserOptionCompletions(parser, optionsDefinedInArgs),
+    _parserOptionCompletions(
+      parser,
+      optionsDefinedInArgs,
+      includeHidden: includeHidden,
+    ),
   );
 
   /*
@@ -121,6 +129,7 @@ List<String> getArgsCompletions(
         subCommandArgs,
         compLine,
         compPoint,
+        includeHidden: includeHidden,
       );
     }
   } else {
@@ -146,6 +155,7 @@ List<String> getArgsCompletions(
             subCommandArgs,
             compLine,
             compPoint,
+            includeHidden: includeHidden,
           );
         }
       }
@@ -287,8 +297,9 @@ Option? _getOptionForArg(ArgParser parser, String arg) {
 
 Iterable<String> _parserOptionCompletions(
   ArgParser parser,
-  Set<Option> existingOptions,
-) {
+  Set<Option> existingOptions, {
+  required bool includeHidden,
+}) {
   assert(
     existingOptions.every((option) => parser.options.containsValue(option)),
   );
@@ -296,7 +307,8 @@ Iterable<String> _parserOptionCompletions(
   return parser.options.values
       .where(
         (opt) =>
-            !existingOptions.contains(opt) || opt.type == OptionType.multiple,
+            (includeHidden || !opt.hide) &&
+            (!existingOptions.contains(opt) || opt.type == OptionType.multiple),
       )
       .expand(_argsOptionCompletions);
 }
