@@ -6,9 +6,10 @@
 - **BREAKING** The output of `generateCompletionScript` has been rewritten to
   generate a script for a single shell at a time, and now requires a `shell`
   argument to select which shell to generate a script for.
-- Require Dart 3.10
 - **BREAKING** Default completion behavior now excludes options marked as
   `hide: true`.
+- Add support for Nushell (`nushell`) completion generation.
+- Require Dart 3.10
 - Added `includeHidden` parameter to `tryArgsCompletion` and
   `getArgsCompletions` to allow opting into showing hidden items.
 - Added heuristic subcommand detection to `getArgsCompletions`. When parsing
