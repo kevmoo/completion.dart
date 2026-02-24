@@ -198,30 +198,32 @@ fi
 ''';
 
 const _nushellTemplate = r'''
-let existing_completer = ($env.config?.completions?.external?.completer? | default null)
+$env.config = (do {
+    let existing_completer = ($env.config?.completions?.external?.completer? | default null)
 
-let {{funcName}} = {|spans|
-    if ($spans | first) == "{{binName}}" {
-        let context = ($spans | str join " ")
-        let offset = ($context | str length)
-        
-        with-env {
-            COMP_LINE: $context,
-            COMP_POINT: ($offset | into string)
-        } {
-            ^{{binName}} completion -- ...$spans | lines
+    let completer = {|spans|
+        if ($spans | first) == "{{binName}}" {
+            let context = ($spans | str join " ")
+            let offset = ($context | str length)
+            
+            with-env {
+                COMP_LINE: $context,
+                COMP_POINT: ($offset | into string)
+            } {
+                ^{{binName}} completion -- ...$spans | lines
+            }
+        } else if $existing_completer != null {
+            do $existing_completer $spans
+        } else {
+            null
         }
-    } else if $existing_completer != null {
-        do $existing_completer $spans
-    } else {
-        null
     }
-}
 
-mut current = (($env | default {} config).config | default {} completions)
-$current.completions = ($current.completions | default {} external)
-$current.completions.external = ($current.completions.external | default true enable)
-$current.completions.external.completer = ${{funcName}}
+    mut current = (($env | default {} config).config | default {} completions)
+    $current.completions = ($current.completions | default {} external)
+    $current.completions.external = ($current.completions.external | default true enable)
+    $current.completions.external.completer = $completer
 
-$env.config = $current
+    $current
+})
 ''';
