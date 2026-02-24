@@ -12,11 +12,17 @@ const _exampleFileName = 'example.dart';
 final _exampleFilePath = p.join('example', _exampleFileName);
 
 void main() {
-  final hasNu = Process.runSync('which', ['nu']).exitCode == 0;
+  bool getHasNu() {
+    try {
+      return Process.runSync('nu', ['--version']).exitCode == 0;
+    } on ProcessException {
+      return false;
+    }
+  }
 
   test(
     'nushell completer hook executes correctly',
-    skip: hasNu ? null : 'nushell not installed',
+    skip: getHasNu() ? null : 'nushell not installed',
 
     () async {
       final tempDir = Directory.systemTemp.createTempSync('nu_shell_test');
