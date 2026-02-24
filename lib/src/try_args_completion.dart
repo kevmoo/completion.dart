@@ -17,8 +17,9 @@ import 'try_completion.dart';
 /// [logFile] is a deprecated argument that is useful for testing, but should
 /// not be used in production code.
 ///
-/// If [includeHidden] is `true`, options and commands marked as hidden will be
-/// included in the completion suggestions.
+/// If [includeHidden] is `true`, options marked as hidden will be included in
+/// the completion suggestions.
+/// (Hidden commands are always included.)
 ArgResults tryArgsCompletion(
   List<String> mainArgs,
   ArgParser parser, {

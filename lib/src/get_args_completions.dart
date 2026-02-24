@@ -10,8 +10,9 @@ import 'util.dart';
 /// [compLine] is the current command line.
 /// [compPoint] is the current position in the command line.
 ///
-/// If [includeHidden] is `true`, options and commands marked as hidden will be
-/// included in the completion suggestions.
+/// If [includeHidden] is `true`, options marked as hidden will be included in
+/// the completion suggestions.
+/// (Hidden commands are always included.)
 @internal
 List<String> getArgsCompletions(
   ArgParser parser,
