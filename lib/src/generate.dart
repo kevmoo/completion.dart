@@ -21,18 +21,131 @@ const _funcNameReplacement = '{{funcName}}';
 /// Must end with letter or number
 final _binNameMatch = RegExp(r'^[a-zA-Z0-9]((\w|-|\.)*[a-zA-Z0-9])?$');
 
-/// The shells that we support completion generation for.
+/// Supported shells for completion generation.
 enum Shell {
-  bash(_bashTemplate, _bashInstallation),
-  zsh(_zshTemplate, _zshInstallation),
-  fish(_fishTemplate, _fishInstallation),
-  nushell(_nushellTemplate, _nushellInstallation);
+  bash(
+    installation: '''
+Installation:
+
+Via shell config file  ~/.bashrc  (or ~/.bash_profile)
+
+  Append the contents to config file
+  'source' the file in the config file
+
+You may also have a directory on your system that is configured
+   for completion files, such as:
+
+   /usr/local/etc/bash_completion.d/
+''',
+    template: r'''
+if type complete &>/dev/null; then
+  {{funcName}}() {
+    local si="$IFS"
+    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
+                           COMP_LINE="$COMP_LINE" \
+                           COMP_POINT="$COMP_POINT" \
+                           {{binName}} completion -- "${COMP_WORDS[@]}" \
+                           2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  complete -F {{funcName}} {{binName}}
+fi
+''',
+  ),
+  zsh(
+    installation: '''
+Installation:
+
+Via shell config file  ~/.zshrc
+
+  Append the contents to config file
+  'source' the file in the config file
+
+You may also have a directory on your system that is configured
+   for completion files, such as:
+
+   /usr/local/share/zsh/site-functions/
+''',
+    template: r'''
+if type compdef &>/dev/null; then
+  {{funcName}}() {
+    local si
+    si=$IFS
+    IFS=$'\n'
+    local reply
+    reply=($(COMP_CWORD="$((CURRENT-1))" \
+             COMP_LINE="$BUFFER" \
+             COMP_POINT="$CURSOR" \
+             {{binName}} completion -- "${words[@]}" \
+             2>/dev/null)) || return $?
+    IFS=$si
+    if [ -n "$reply" ]; then
+        _describe '{{binName}}' reply
+    fi
+  }
+  compdef {{funcName}} {{binName}}
+fi
+''',
+  ),
+  fish(
+    installation: '''
+Installation:
+
+Via fish config file  ~/.config/fish/config.fish
+
+  Append the contents to config file
+''',
+    template: '''
+if type complete &>/dev/null && [ (complete -c {{binName}} | wc -l) -eq 0 ]; then
+  complete -c {{binName}} -f -a "({{binName}} completion -- (commandline -opc) (commandline -t))"
+fi
+''',
+  ),
+  nushell(
+    installation: '''
+Installation:
+
+Via nushell config file  ~/.config/nushell/env.nu
+
+  Append the contents to config file
+''',
+    template: r'''
+$env.config = (do {
+    let existing_completer = ($env.config?.completions?.external?.completer? | default null)
+
+    let {{funcName}} = {|spans|
+        if ($spans | first) == "{{binName}}" {
+            let context = ($spans | str join " ")
+            let offset = ($context | str length)
+            
+            with-env {
+                COMP_LINE: $context,
+                COMP_POINT: ($offset | into string)
+            } {
+                ^{{binName}} completion -- ...$spans | lines
+            }
+        } else if $existing_completer != null {
+            do $existing_completer $spans
+        } else {
+            null
+        }
+    }
+
+    mut current = (($env | default {} config).config | default {} completions)
+    $current.completions = ($current.completions | default {} external)
+    $current.completions.external = ($current.completions.external | default true enable)
+    $current.completions.external.completer = ${{funcName}}
+
+    $current
+})
+''',
+  );
 
   /// Parse a shell name from a string.
   static Shell? parse(String name) =>
       Shell.values.where((e) => e.name == name).singleOrNull;
 
-  const Shell(this.template, this.installation);
+  const Shell({required this.installation, required this.template});
 
   final String template;
   final String installation;
@@ -106,124 +219,3 @@ String _printBinName(String binName, Shell shell) {
 
   return buffer.toString();
 }
-
-const _bashInstallation = '''
-
-Installation:
-
-Via shell config file  ~/.bashrc  (or ~/.bash_profile)
-
-  Append the contents to config file
-  'source' the file in the config file
-
-You may also have a directory on your system that is configured
-   for completion files, such as:
-
-   /usr/local/etc/bash_completion.d/
-''';
-
-const _zshInstallation = '''
-
-Installation:
-
-Via shell config file  ~/.zshrc
-
-  Append the contents to config file
-  'source' the file in the config file
-
-You may also have a directory on your system that is configured
-   for completion files, such as:
-
-   /usr/local/share/zsh/site-functions/
-''';
-
-const _fishInstallation = '''
-
-Installation:
-
-Via fish config file  ~/.config/fish/config.fish
-
-  Append the contents to config file
-''';
-
-const _nushellInstallation = '''
-
-Installation:
-
-Via nushell config file  ~/.config/nushell/env.nu
-
-  Append the contents to config file
-''';
-
-const _bashTemplate = r'''
-if type complete &>/dev/null; then
-  {{funcName}}() {
-    local si="$IFS"
-    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
-                           COMP_LINE="$COMP_LINE" \
-                           COMP_POINT="$COMP_POINT" \
-                           {{binName}} completion -- "${COMP_WORDS[@]}" \
-                           2>/dev/null)) || return $?
-    IFS="$si"
-  }
-  complete -F {{funcName}} {{binName}}
-fi
-''';
-
-const _zshTemplate = r'''
-if type compdef &>/dev/null; then
-  {{funcName}}() {
-    local si
-    si=$IFS
-    IFS=$'\n'
-    local reply
-    reply=($(COMP_CWORD="$((CURRENT-1))" \
-             COMP_LINE="$BUFFER" \
-             COMP_POINT="$CURSOR" \
-             {{binName}} completion -- "${words[@]}" \
-             2>/dev/null)) || return $?
-    IFS=$si
-    if [ -n "$reply" ]; then
-        _describe '{{binName}}' reply
-    fi
-  }
-  compdef {{funcName}} {{binName}}
-fi
-''';
-
-const _fishTemplate = '''
-if type complete &>/dev/null && [ (complete -c {{binName}} | wc -l) -eq 0 ]; then
-  complete -c {{binName}} -f -a "({{binName}} completion -- (commandline -opc) (commandline -t))"
-fi
-''';
-
-const _nushellTemplate = r'''
-$env.config = (do {
-    let existing_completer = ($env.config?.completions?.external?.completer? | default null)
-
-    let completer = {|spans|
-        if ($spans | first) == "{{binName}}" {
-            let context = ($spans | str join " ")
-            let offset = ($context | str length)
-            
-            with-env {
-                COMP_LINE: $context,
-                COMP_POINT: ($offset | into string)
-            } {
-                ^{{binName}} completion -- ...$spans | lines
-            }
-        } else if $existing_completer != null {
-            do $existing_completer $spans
-        } else {
-            null
-        }
-    }
-
-    mut current = (($env | default {} config).config | default {} completions)
-    $current.completions = ($current.completions | default {} external)
-    $current.completions.external = ($current.completions.external | default true enable)
-    $current.completions.external.completer = $completer
-
-    $current
-})
-''';
