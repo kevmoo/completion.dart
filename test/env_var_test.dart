@@ -42,5 +42,13 @@ void main() {
       );
       expect(exitCode, isNull);
     });
+
+    test('exception in completer returns 1', () {
+      final args = ['completion', '--', 'exe', 'a'];
+      final exitCode = tryCompletionImpl(args, (a, l, p) {
+        throw StateError('Test exception');
+      }, environment: {'COMP_LINE': 'exe a', 'COMP_POINT': '5'});
+      expect(exitCode, 1);
+    });
   });
 }
