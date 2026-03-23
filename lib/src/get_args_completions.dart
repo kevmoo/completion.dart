@@ -214,7 +214,7 @@ List<String> getArgsCompletions(
 
         return option.allowed!.where((v) => v.startsWith(optionValue)).toList();
       } else if (!option.isFlag) {
-        sublog('not providing completions. Wating for option value');
+        sublog('not providing completions. Waiting for option value');
         return const [];
       }
     }
