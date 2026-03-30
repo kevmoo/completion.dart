@@ -14,7 +14,7 @@ import 'util.dart';
 /// the completion suggestions.
 /// (Hidden commands are always included.)
 @internal
-List<String> getArgsCompletions(
+Iterable<String> getArgsCompletions(
   ArgParser parser,
   List<String> providedArgs,
   String compLine,
@@ -50,12 +50,9 @@ List<String> getArgsCompletions(
 
   if (providedArgs.isEmpty) {
     sublog('empty args. Complete with all available commands');
-    return parser.commands.keys.toList();
+    return parser.commands.keys;
   }
 
-  final alignedArgsOptions = providedArgs
-      .map((arg) => _getOptionForArg(parser, arg))
-      .toList();
 
   /*
    * NOTE: nuanced behavior
@@ -70,11 +67,14 @@ List<String> getArgsCompletions(
 
   // a set of options in use (minus, potentially, the last one)
   // all non-null, all unique
-  final optionsDefinedInArgs = alignedArgsOptions
-      .take(alignedArgsOptions.length - 1)
+  final optionsDefinedInArgs = providedArgs
+      .take(providedArgs.length - 1)
+      .map((arg) => _getOptionForArg(parser, arg))
       .whereType<Option>()
       .toSet();
-  sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
+  sublog(
+    'defined options: ${optionsDefinedInArgs.map((Option o) => o.name).toSet()}',
+  );
 
   final parserOptionCompletions = List<String>.unmodifiable(
     _parserOptionCompletions(
@@ -180,7 +180,7 @@ List<String> getArgsCompletions(
     if (compLine.endsWith(' ')) {
       // if the removed item maps to an option w/ allowed values
       // we should return those values to complete against
-      final option = alignedArgsOptions[providedArgs.length - 1];
+      final option = _getOptionForArg(parser, providedArgs.last);
       if (option != null &&
           option.allowed != null &&
           option.allowed!.isNotEmpty) {
@@ -188,14 +188,13 @@ List<String> getArgsCompletions(
 
         sublog('completing all allowed value for option "${option.name}"');
 
-        return option.allowed!.toList();
+        return option.allowed!;
       }
     } else {
       sublog('completing the name of options starting with "$removedItem"');
 
       return parserOptionCompletions
-          .where((String option) => option.startsWith(removedItem))
-          .toList();
+          .where((String option) => option.startsWith(removedItem));
     }
   }
 
@@ -204,7 +203,7 @@ List<String> getArgsCompletions(
    * then we should complete with the available options, right?
    */
   if (providedArgs.length >= 2) {
-    final option = alignedArgsOptions[providedArgs.length - 2];
+    final option = _getOptionForArg(parser, providedArgs[providedArgs.length - 2]);
     if (option != null) {
       if (option.allowed != null && option.allowed!.isNotEmpty) {
         assert(!option.isFlag);
@@ -212,7 +211,7 @@ List<String> getArgsCompletions(
 
         final optionValue = providedArgs[providedArgs.length - 1];
 
-        return option.allowed!.where((v) => v.startsWith(optionValue)).toList();
+        return option.allowed!.where((String v) => v.startsWith(optionValue));
       } else if (!option.isFlag) {
         sublog('not providing completions. Waiting for option value');
         return const [];
@@ -227,7 +226,7 @@ List<String> getArgsCompletions(
   if (removedItems.isEmpty && lastArg == '') {
     sublog('doing command completion');
 
-    return parser.commands.keys.toList();
+    return parser.commands.keys;
   }
 
   /*
@@ -248,8 +247,7 @@ List<String> getArgsCompletions(
     sublog('completing command names that start with "$lastArg"');
 
     return parser.commands.keys
-        .where((String commandName) => commandName.startsWith(lastArg))
-        .toList();
+        .where((String commandName) => commandName.startsWith(lastArg));
   }
 
   /*
@@ -307,7 +305,7 @@ Iterable<String> _parserOptionCompletions(
 
   return parser.options.values
       .where(
-        (opt) =>
+        (Option opt) =>
             (includeHidden || !opt.hide) &&
             (!existingOptions.contains(opt) || opt.type == OptionType.multiple),
       )

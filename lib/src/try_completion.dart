@@ -32,7 +32,7 @@ const _compPointVar = 'COMP_POINT';
 /// in production code.
 int? tryCompletion(
   List<String> args,
-  List<String> Function(List<String> args, String compLine, int compPoint)
+  Iterable<String> Function(List<String> args, String compLine, int compPoint)
   completer, {
   @Deprecated('Useful for testing, but do not release with this set.')
   bool? logFile,
@@ -41,7 +41,7 @@ int? tryCompletion(
 @internal
 int? tryCompletionImpl(
   List<String> args,
-  List<String> Function(List<String> args, String compLine, int compPoint)
+  Iterable<String> Function(List<String> args, String compLine, int compPoint)
   completer, {
   @Deprecated('Useful for testing, but do not release with this set.')
   bool? logFile,
@@ -57,7 +57,7 @@ int? tryCompletionImpl(
 
     logLine(' *' * 50);
 
-    Logger.root.onRecord.listen((e) {
+    Logger.root.onRecord.listen((LogRecord e) {
       final loggerName = e.loggerName.split('.');
       if (loggerName.isNotEmpty && loggerName.first == 'completion') {
         loggerName.removeAt(0);
