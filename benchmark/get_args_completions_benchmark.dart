@@ -11,7 +11,7 @@ void main() {
 
   // Warmup
   for (var i = 0; i < 10000; i++) {
-    getArgsCompletions(parser, args, compLine, compPoint);
+    getArgsCompletions(parser, args, compLine, compPoint).toList();
   }
 
   final watch = Stopwatch()..start();
