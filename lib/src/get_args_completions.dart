@@ -53,7 +53,6 @@ Iterable<String> getArgsCompletions(
     return parser.commands.keys;
   }
 
-
   /*
    * NOTE: nuanced behavior
    * If the last item provided is a full, real item (command or option)
@@ -73,7 +72,8 @@ Iterable<String> getArgsCompletions(
       .whereType<Option>()
       .toSet();
   sublog(
-    'defined options: ${optionsDefinedInArgs.map((Option o) => o.name).toSet()}',
+    'defined options: '
+    '${optionsDefinedInArgs.map((Option o) => o.name).toSet()}',
   );
 
   final parserOptionCompletions = List<String>.unmodifiable(
@@ -193,8 +193,9 @@ Iterable<String> getArgsCompletions(
     } else {
       sublog('completing the name of options starting with "$removedItem"');
 
-      return parserOptionCompletions
-          .where((String option) => option.startsWith(removedItem));
+      return parserOptionCompletions.where(
+        (String option) => option.startsWith(removedItem),
+      );
     }
   }
 
@@ -203,7 +204,10 @@ Iterable<String> getArgsCompletions(
    * then we should complete with the available options, right?
    */
   if (providedArgs.length >= 2) {
-    final option = _getOptionForArg(parser, providedArgs[providedArgs.length - 2]);
+    final option = _getOptionForArg(
+      parser,
+      providedArgs[providedArgs.length - 2],
+    );
     if (option != null) {
       if (option.allowed != null && option.allowed!.isNotEmpty) {
         assert(!option.isFlag);
@@ -246,8 +250,9 @@ Iterable<String> getArgsCompletions(
 
     sublog('completing command names that start with "$lastArg"');
 
-    return parser.commands.keys
-        .where((String commandName) => commandName.startsWith(lastArg));
+    return parser.commands.keys.where(
+      (String commandName) => commandName.startsWith(lastArg),
+    );
   }
 
   /*

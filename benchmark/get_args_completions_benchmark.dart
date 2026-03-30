@@ -1,4 +1,3 @@
-import 'package:args/args.dart';
 import 'package:completion/src/get_args_completions.dart';
 import '../test/completion_tests_args.dart';
 
@@ -17,7 +16,7 @@ void main() {
 
   final watch = Stopwatch()..start();
   for (var i = 0; i < iterations; i++) {
-    getArgsCompletions(parser, args, compLine, compPoint);
+    getArgsCompletions(parser, args, compLine, compPoint).toList();
   }
   watch.stop();
 

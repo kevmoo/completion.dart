@@ -25,11 +25,15 @@ void main() {
 
     test('valid completion returns 0', () {
       final args = <String>['completion', '--', 'exe', 'a'];
-      final exitCode = tryCompletionImpl(args, (List<String> a, String l, int p) {
-        expect(l, 'exe a');
-        expect(p, 5);
-        return <String>['completion'];
-      }, environment: <String, String>{'COMP_LINE': 'exe a', 'COMP_POINT': '5'});
+      final exitCode = tryCompletionImpl(
+        args,
+        (List<String> a, String l, int p) {
+          expect(l, 'exe a');
+          expect(p, 5);
+          return <String>['completion'];
+        },
+        environment: <String, String>{'COMP_LINE': 'exe a', 'COMP_POINT': '5'},
+      );
       expect(exitCode, 0);
     });
 
@@ -45,9 +49,13 @@ void main() {
 
     test('exception in completer returns 1', () {
       final args = <String>['completion', '--', 'exe', 'a'];
-      final exitCode = tryCompletionImpl(args, (List<String> a, String l, int p) {
-        throw StateError('Test exception');
-      }, environment: <String, String>{'COMP_LINE': 'exe a', 'COMP_POINT': '5'});
+      final exitCode = tryCompletionImpl(
+        args,
+        (List<String> a, String l, int p) {
+          throw StateError('Test exception');
+        },
+        environment: <String, String>{'COMP_LINE': 'exe a', 'COMP_POINT': '5'},
+      );
       expect(exitCode, 1);
     });
   });
