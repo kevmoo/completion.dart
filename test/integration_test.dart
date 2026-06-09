@@ -24,7 +24,7 @@ void main() {
       environment: {'COMP_POINT': '15', 'COMP_LINE': '$_exampleFileName --'},
     );
 
-    final completions = [for (var i = 0; i < 5; i++) await process.stdout.next];
+    final completions = await process.stdout.rest.toList();
     check(completions).unorderedEquals([
       '--friendly',
       '--loud',
