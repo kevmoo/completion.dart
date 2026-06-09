@@ -6,41 +6,44 @@ void main() {
   test('golden test for completion script', () {
     final script = generateCompletionScript(['my_app'], shell: Shell.bash);
 
-    check(script).contains('###-begin-my_app-completion-###');
-    check(script).contains('###-for-bash-###');
-    check(script).contains('complete -F __my_app_completion my_app');
-    check(script).not((it) => it.contains('###-for-zsh-###'));
-    check(script).not((it) => it.contains('###-for-fish-###'));
-    check(script).contains('###-end-my_app-completion-###');
+    check(script)
+      ..contains('###-begin-my_app-completion-###')
+      ..contains('###-for-bash-###')
+      ..contains('complete -F __my_app_completion my_app')
+      ..not((it) => it.contains('###-for-zsh-###'))
+      ..not((it) => it.contains('###-for-fish-###'))
+      ..contains('###-end-my_app-completion-###');
   });
 
   test('generate script for specific shell', () {
     final script = generateCompletionScript(['my_app'], shell: Shell.fish);
 
-    check(script).contains('###-begin-my_app-completion-###');
-    check(script).not((it) => it.contains('###-for-bash-###'));
-    check(script).not((it) => it.contains('###-for-zsh-###'));
-    check(script).contains('###-for-fish-###');
-    check(script).contains('complete -c my_app -f -a');
-    check(script).contains('###-end-my_app-completion-###');
+    check(script)
+      ..contains('###-begin-my_app-completion-###')
+      ..not((it) => it.contains('###-for-bash-###'))
+      ..not((it) => it.contains('###-for-zsh-###'))
+      ..contains('###-for-fish-###')
+      ..contains('complete -c my_app -f -a')
+      ..contains('###-end-my_app-completion-###');
   });
 
   test('generate script for nushell', () {
     final script = generateCompletionScript(['my_app'], shell: Shell.nushell);
 
-    check(script).contains('###-begin-my_app-completion-###');
-    check(script).not((it) => it.contains('###-for-bash-###'));
-    check(script).not((it) => it.contains('###-for-zsh-###'));
-    check(script).not((it) => it.contains('###-for-fish-###'));
-    check(script).contains('###-for-nushell-###');
-    check(script).contains('let __my_app_completion = {|spans|');
-    check(script).contains(r'mut config = ($env.config | default {})');
-    check(script).contains(
-      r'$config = ($config | upsert completions.external.enable true)',
-    );
-    check(script).contains(
-      r'$config.completions.external.completer = $__my_app_completion',
-    );
-    check(script).contains('###-end-my_app-completion-###');
+    check(script)
+      ..contains('###-begin-my_app-completion-###')
+      ..not((it) => it.contains('###-for-bash-###'))
+      ..not((it) => it.contains('###-for-zsh-###'))
+      ..not((it) => it.contains('###-for-fish-###'))
+      ..contains('###-for-nushell-###')
+      ..contains('let __my_app_completion = {|spans|')
+      ..contains(r'mut config = ($env.config | default {})')
+      ..contains(
+        r'$config = ($config | upsert completions.external.enable true)',
+      )
+      ..contains(
+        r'$config.completions.external.completer = $__my_app_completion',
+      )
+      ..contains('###-end-my_app-completion-###');
   });
 }
