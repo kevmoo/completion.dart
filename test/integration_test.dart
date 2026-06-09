@@ -1,5 +1,5 @@
+import 'package:checks/checks.dart';
 import 'package:path/path.dart' as p;
-import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:test_process/test_process.dart';
 
@@ -12,7 +12,7 @@ void main() {
   test('normal execution', () async {
     final process = await TestProcess.start(dartPath, [_exampleFilePath]);
 
-    await expectLater(process.stdout, emitsThrough('Hello, World'));
+    await check(process.stdout).emitsThrough((it) => it.equals('Hello, World'));
 
     await process.shouldExit(0);
   });
@@ -24,16 +24,16 @@ void main() {
       environment: {'COMP_POINT': '15', 'COMP_LINE': '$_exampleFileName --'},
     );
 
-    await expectLater(
-      process.stdout,
-      emitsInAnyOrder([
-        '--friendly',
-        '--loud',
-        '--no-loud',
-        '--salutation',
-        '--middle-name',
-      ]),
+    final completions = await Future.wait(
+      List.generate(5, (_) => process.stdout.next),
     );
+    check(completions).unorderedEquals([
+      '--friendly',
+      '--loud',
+      '--no-loud',
+      '--salutation',
+      '--middle-name',
+    ]);
 
     await process.shouldExit(0);
   });
@@ -46,7 +46,7 @@ void main() {
       environment: {'COMP_POINT': '${compLine.length}', 'COMP_LINE': compLine},
     );
 
-    await expectLater(process.stdout, emits('assistance'));
+    await check(process.stdout).emits((it) => it.equals('assistance'));
 
     await process.shouldExit(0);
   });
