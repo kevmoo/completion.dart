@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
+import 'package:checks/checks.dart';
 import 'package:completion/src/get_args_completions.dart';
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 
 void main() {
   test('hidden options are not completed by default', () {
@@ -9,8 +10,9 @@ void main() {
       ..addOption('hidden', hide: true, help: 'hidden option');
 
     final completions = getArgsCompletions(parser, ['--'], '--', 2);
-    expect(completions, contains('--visible'));
-    expect(completions, isNot(contains('--hidden')));
+    check(completions)
+      ..contains('--visible')
+      ..not((it) => it.contains('--hidden'));
   });
 
   test('hidden options are completed when includeHidden is true', () {
@@ -25,8 +27,9 @@ void main() {
       2,
       includeHidden: true,
     );
-    expect(completions, contains('--visible'));
-    expect(completions, contains('--hidden'));
+    check(completions)
+      ..contains('--visible')
+      ..contains('--hidden');
   });
 
   test('hidden flags are not completed by default', () {
@@ -35,8 +38,9 @@ void main() {
       ..addFlag('hidden', hide: true, help: 'hidden flag');
 
     final completions = getArgsCompletions(parser, ['--'], '--', 2);
-    expect(completions, contains('--visible'));
-    expect(completions, isNot(contains('--hidden')));
+    check(completions)
+      ..contains('--visible')
+      ..not((it) => it.contains('--hidden'));
   });
 
   test('hidden flags are completed when includeHidden is true', () {
@@ -51,7 +55,8 @@ void main() {
       2,
       includeHidden: true,
     );
-    expect(completions, contains('--visible'));
-    expect(completions, contains('--hidden'));
+    check(completions)
+      ..contains('--visible')
+      ..contains('--hidden');
   });
 }

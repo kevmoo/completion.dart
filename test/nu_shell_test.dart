@@ -4,9 +4,10 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:checks/checks.dart';
 import 'package:completion/completion.dart';
 import 'package:path/path.dart' as p;
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 import 'package:test_process/test_process.dart';
 
 import 'test_utils.dart';
@@ -73,9 +74,10 @@ print (\$result | to json)
 
       // Attempt to decode the JSON
       final decoded = jsonDecode(allOutput) as List<dynamic>;
-      expect(decoded, contains('--friendly'));
-      expect(decoded, contains('--loud'));
-      expect(decoded, contains('--no-loud'));
+      check(decoded)
+        ..contains('--friendly')
+        ..contains('--loud')
+        ..contains('--no-loud');
 
       await process.shouldExit(0);
     },
