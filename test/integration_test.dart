@@ -1,5 +1,6 @@
 import 'package:path/path.dart' as p;
-import 'package:test/test.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:test_process/test_process.dart';
 
 import 'test_utils.dart';

@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
+import 'package:checks/checks.dart';
 import 'package:completion/src/get_args_completions.dart';
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 
 void main() {
   group('heuristic subcommand detection', () {
@@ -8,7 +9,11 @@ void main() {
       ..addFlag('verbose')
       ..addCommand('commit', ArgParser()..addFlag('amend'));
 
-    void check(String description, List<String> args, Object matcher) {
+    void testHeuristic(
+      String description,
+      List<String> args,
+      void Function(Subject<List<String>>) condition,
+    ) {
       test(description, () {
         final completions = getArgsCompletions(
           parser,
@@ -16,19 +21,27 @@ void main() {
           args.join(' '),
           args.join(' ').length,
         );
-        expect(completions, matcher);
+        condition(check(completions));
       });
     }
 
-    check('simple', ['--unknown', 'commit', '--a'], contains('--amend'));
+    testHeuristic('simple', [
+      '--unknown',
+      'commit',
+      '--a',
+    ], (it) => it.contains('--amend'));
 
-    check('with multiple invalid args', [
+    testHeuristic('with multiple invalid args', [
       '--unknown',
       'junk',
       'commit',
       '--a',
-    ], contains('--amend'));
+    ], (it) => it.contains('--amend'));
 
-    check('no subcommand found', ['--unknown', 'junk', '--a'], isEmpty);
+    testHeuristic('no subcommand found', [
+      '--unknown',
+      'junk',
+      '--a',
+    ], (it) => it.isEmpty());
   });
 }

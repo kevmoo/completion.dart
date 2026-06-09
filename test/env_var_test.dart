@@ -1,5 +1,6 @@
+import 'package:checks/checks.dart';
 import 'package:completion/src/try_completion.dart';
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 
 void main() {
   group('tryCompletion environment parsing', () {
@@ -10,7 +11,7 @@ void main() {
         (a, l, p) => [],
         environment: {},
       );
-      expect(exitCode, 1);
+      check(exitCode).equals(1);
     });
 
     test('missing COMP_POINT returns 1', () {
@@ -20,17 +21,17 @@ void main() {
         (a, l, p) => [],
         environment: {'COMP_LINE': 'exe '},
       );
-      expect(exitCode, 1);
+      check(exitCode).equals(1);
     });
 
     test('valid completion returns 0', () {
       final args = ['completion', '--', 'exe', 'a'];
       final exitCode = tryCompletionImpl(args, (a, l, p) {
-        expect(l, 'exe a');
-        expect(p, 5);
+        check(l).equals('exe a');
+        check(p).equals(5);
         return ['completion'];
       }, environment: {'COMP_LINE': 'exe a', 'COMP_POINT': '5'});
-      expect(exitCode, 0);
+      check(exitCode).equals(0);
     });
 
     test('no completion args returns null', () {
@@ -40,7 +41,7 @@ void main() {
         (a, l, p) => [],
         environment: {},
       );
-      expect(exitCode, isNull);
+      check(exitCode).isNull();
     });
 
     test('exception in completer returns 1', () {
@@ -48,7 +49,7 @@ void main() {
       final exitCode = tryCompletionImpl(args, (a, l, p) {
         throw StateError('Test exception');
       }, environment: {'COMP_LINE': 'exe a', 'COMP_POINT': '5'});
-      expect(exitCode, 1);
+      check(exitCode).equals(1);
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
+import 'package:checks/checks.dart';
 import 'package:completion/src/get_args_completions.dart';
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 
 import 'completion_tests_args.dart';
 
@@ -191,11 +192,10 @@ void _testCompletionPair(
 ) {
   final completions = getArgsCompletions(parser, args, compLine, compPoint);
 
-  expect(
+  check(
     completions,
-    unorderedEquals(suggestions),
-    reason: 'for args: $args expected: $suggestions but got: $completions',
-  );
+    because: 'for args: $args expected: $suggestions but got: $completions',
+  ).unorderedEquals(suggestions);
 }
 
 typedef _CompletionSet = (
