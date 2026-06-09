@@ -192,10 +192,7 @@ void _testCompletionPair(
 ) {
   final completions = getArgsCompletions(parser, args, compLine, compPoint);
 
-  check(
-    completions,
-    because: 'for args: $args expected: $suggestions but got: $completions',
-  ).unorderedEquals(suggestions);
+  check(completions, because: 'for args: $args').unorderedEquals(suggestions);
 }
 
 typedef _CompletionSet = (
