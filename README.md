@@ -1,4 +1,4 @@
-*Add shell command completion to your Dart console applications.*
+_Add shell command completion to your Dart console applications._
 
 [![Dart CI](https://github.com/kevmoo/completion.dart/actions/workflows/ci.yml/badge.svg)](https://github.com/kevmoo/completion.dart/actions/workflows/ci.yml)
 [![pub package](https://img.shields.io/pub/v/completion.svg)](https://pub.dev/packages/completion)
@@ -31,13 +31,14 @@ void main(List<String> args) {
 }
 ```
 
-(The only difference is calling `complete.tryArgsCompletion` in place of `argParser.parse`)
+(The only difference is calling `complete.tryArgsCompletion` in place of
+`argParser.parse`)
 
-This will add a "completion" command to your app, which the shell will use
-to complete arguments.
+This will add a "completion" command to your app, which the shell will use to
+complete arguments.
 
-To generate the setup script automatically, call `generateCompletionScript`
-with the names of the executables that your Dart script runs as (typically
-just one, but it could be more), along with the target `Shell`.
+To generate the setup script automatically, call `generateCompletionScript` with
+the names of the executables that your Dart script runs as (typically just one,
+but it could be more), along with the target `Shell`.
 
 Also, see [the example](./example).
