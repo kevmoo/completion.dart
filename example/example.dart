@@ -10,7 +10,7 @@ import '../test/completion_tests_args.dart';
 void main(List<String> args) {
   final argParser = getHelloSampleParser();
 
-  ArgResults argResult;
+  ArgResults? argResult;
 
   try {
     argResult = tryArgsCompletion(
@@ -25,6 +25,10 @@ void main(List<String> args) {
 
     /// 64 - C/C++ standard for bad usage.
     exitCode = 64;
+    return;
+  }
+
+  if (argResult == null) {
     return;
   }
 

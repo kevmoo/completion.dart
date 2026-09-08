@@ -27,6 +27,7 @@ void main(List<String> args) {
   final argParser = ArgParser()..addFlag('option', help: 'flag help');
   // ... add more options ...
   final argResults = completion.tryArgsCompletion(args, argParser);
+  if (argResults == null) return;
   // ...
 }
 ```
