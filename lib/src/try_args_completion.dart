@@ -23,7 +23,7 @@ import 'try_completion.dart';
 ArgResults? tryArgsCompletion(
   List<String> mainArgs,
   ArgParser parser, {
-  @Deprecated('Useful for testing, but do not released with this set.')
+  @Deprecated('Useful for testing, but do not release with this set.')
   bool? logFile,
   bool includeHidden = false,
 }) {

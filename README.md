@@ -32,8 +32,8 @@ void main(List<String> args) {
 }
 ```
 
-(The only difference is calling `complete.tryArgsCompletion` in place of
-`argParser.parse`)
+(The main difference is calling `completion.tryArgsCompletion` in place of
+`argParser.parse` and returning early when it returns `null`.)
 
 This will add a "completion" command to your app, which the shell will use to
 complete arguments.

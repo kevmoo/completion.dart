@@ -10,11 +10,13 @@ void main() {
   group('tryArgsCompletion', () {
     test('returns null and sets exitCode without calling exit()', () {
       final parser = ArgParser()..addFlag('verbose');
+      final originalExitCode = exitCode;
+      addTearDown(() => exitCode = originalExitCode);
+
       exitCode = 0;
       final result = tryArgsCompletion(['completion', '--', 'exe'], parser);
       check(result).isNull();
       check(exitCode).equals(1);
-      exitCode = 0;
     });
 
     test('returns parsed ArgResults when completion is not requested', () {

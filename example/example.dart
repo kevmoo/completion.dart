@@ -20,8 +20,8 @@ void main(List<String> args) {
     );
   } on FormatException catch (ex) {
     // TODO: print color?
-    print(ex.message);
-    print(argParser.usage);
+    stderr.writeln(ex.message);
+    stderr.writeln(argParser.usage);
 
     /// 64 - C/C++ standard for bad usage.
     exitCode = 64;
