@@ -1,8 +1,8 @@
 ## 2.0.0-wip
 
-- **BREAKING** `tryCompletion` no longer calls `exit()`. Instead, it returns an
-  `int?` which is the exit code. A value of `null` indicates that the arguments
-  provided did not trigger completion. Callers must now handle the return value.
+- **BREAKING** `tryArgsCompletion` and `tryCompletion` no longer call `exit()`.
+  - `tryArgsCompletion` now sets `exitCode` and returns `ArgResults?` (`null` when completion was handled).
+  - `tryCompletion` returns an `int?` which is the exit code (`null` when completion was not triggered).
 - **BREAKING** The output of `generateCompletionScript` has been rewritten to
   generate a script for a single shell at a time, and now requires a `shell`
   argument to select which shell to generate a script for.

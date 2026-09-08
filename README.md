@@ -27,12 +27,13 @@ void main(List<String> args) {
   final argParser = ArgParser()..addFlag('option', help: 'flag help');
   // ... add more options ...
   final argResults = completion.tryArgsCompletion(args, argParser);
+  if (argResults == null) return;
   // ...
 }
 ```
 
-(The only difference is calling `complete.tryArgsCompletion` in place of
-`argParser.parse`)
+(The main difference is calling `completion.tryArgsCompletion` in place of
+`argParser.parse` and returning early when it returns `null`.)
 
 This will add a "completion" command to your app, which the shell will use to
 complete arguments.

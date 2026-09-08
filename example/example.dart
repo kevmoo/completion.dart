@@ -10,7 +10,7 @@ import '../test/completion_tests_args.dart';
 void main(List<String> args) {
   final argParser = getHelloSampleParser();
 
-  ArgResults argResult;
+  ArgResults? argResult;
 
   try {
     argResult = tryArgsCompletion(
@@ -20,11 +20,15 @@ void main(List<String> args) {
     );
   } on FormatException catch (ex) {
     // TODO: print color?
-    print(ex.message);
-    print(argParser.usage);
+    stderr.writeln(ex.message);
+    stderr.writeln(argParser.usage);
 
     /// 64 - C/C++ standard for bad usage.
     exitCode = 64;
+    return;
+  }
+
+  if (argResult == null) {
     return;
   }
 

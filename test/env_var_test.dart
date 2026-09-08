@@ -1,8 +1,32 @@
+import 'dart:io';
+
+import 'package:args/args.dart';
 import 'package:checks/checks.dart';
+import 'package:completion/completion.dart';
 import 'package:completion/src/try_completion.dart';
 import 'package:test/scaffolding.dart';
 
 void main() {
+  group('tryArgsCompletion', () {
+    test('returns null and sets exitCode without calling exit()', () {
+      final parser = ArgParser()..addFlag('verbose');
+      final originalExitCode = exitCode;
+      addTearDown(() => exitCode = originalExitCode);
+
+      exitCode = 0;
+      final result = tryArgsCompletion(['completion', '--', 'exe'], parser);
+      check(result).isNull();
+      check(exitCode).equals(1);
+    });
+
+    test('returns parsed ArgResults when completion is not requested', () {
+      final parser = ArgParser()..addFlag('verbose');
+      final result = tryArgsCompletion(['--verbose'], parser);
+      check(result).isNotNull();
+      check(result!['verbose'] as bool).isTrue();
+    });
+  });
+
   group('tryCompletion environment parsing', () {
     test('missing COMP_LINE returns 1', () {
       final args = ['completion', '--', 'exe'];
