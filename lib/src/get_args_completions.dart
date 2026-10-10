@@ -21,35 +21,20 @@ List<String> getArgsCompletions(
   int compPoint, {
   bool includeHidden = false,
 }) {
-  // all arg entries: no empty items, no null items, all pre-trimmed
-  for (var i = 0; i < providedArgs.length; i++) {
-    final arg = providedArgs[i];
-    final msg = 'Arg at index $i with value "$arg" ';
-    if (arg.trim() != arg) throw StateError('$msg has whitespace');
+  _validateProvidedArgs(providedArgs);
 
-    if (i < (providedArgs.length - 1)) {
-      if (arg.isEmpty) {
-        throw StateError('$msg – Only the last arg can be an empty string');
-      }
-    }
-  }
-
-  void sublog(Object obj) {
-    log(obj, Tag.getArgsCompletions);
-  }
-
-  sublog('provided args: ${helpfulToString(providedArgs)}');
-  sublog('COMP_LINE:  "$compLine"');
-  sublog('COMP_POINT:  $compPoint');
+  _sublog('provided args: ${helpfulToString(providedArgs)}');
+  _sublog('COMP_LINE:  "$compLine"');
+  _sublog('COMP_POINT:  $compPoint');
 
   if (compPoint < compLine.length) {
     // TODO: ponder smart ways to handle in-line completion
-    sublog('cursor is in the middle of the line. NO-OP');
+    _sublog('cursor is in the middle of the line. NO-OP');
     return const [];
   }
 
   if (providedArgs.isEmpty) {
-    sublog('empty args. Complete with all available commands');
+    _sublog('empty args. Complete with all available commands');
     return parser.commands.keys.toList();
   }
 
@@ -74,7 +59,9 @@ List<String> getArgsCompletions(
       .take(alignedArgsOptions.length - 1)
       .whereType<Option>()
       .toSet();
-  sublog('defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}');
+  _sublog(
+    'defined options: ${optionsDefinedInArgs.map((o) => o.name).toSet()}',
+  );
 
   final parserOptionCompletions = List<String>.unmodifiable(
     _parserOptionCompletions(
@@ -96,77 +83,33 @@ List<String> getArgsCompletions(
 
   final subsetTuple = _validSubset(parser, providedArgs);
   final validSubSet = subsetTuple.subset;
-  final subsetResult = subsetTuple.result;
 
-  sublog('valid subset: ${helpfulToString(validSubSet)}');
+  _sublog('valid subset: ${helpfulToString(validSubSet)}');
 
   /*
    * CASE: we have a command
    * get recursive
    */
-  if (subsetResult != null && subsetResult.command != null) {
-    // get all of the args *after* the command name
-    // call in recursively with the sub command parser, right?
-    final subCommand = subsetResult.command!;
-    final subCommandIndex = providedArgs.indexOf(subCommand.name!);
-    assert(subCommandIndex >= 0);
-    sublog(
-      'so, it seems we have command "${subCommand.name}" at '
-      'index $subCommandIndex',
+  final subCommand = _resolveSubCommand(
+    parser,
+    providedArgs,
+    subsetTuple,
+    compLine,
+  );
+  if (subCommand != null) {
+    return getArgsCompletions(
+      subCommand.parser,
+      subCommand.args,
+      compLine,
+      compPoint,
+      includeHidden: includeHidden,
     );
-
-    final subCommandParser = parser.commands[subCommand.name]!;
-    final subCommandArgs = providedArgs.sublist(subCommandIndex + 1);
-
-    /*
-     * only start rockin' the sub command parser if
-     * 1) there's a start on sub args
-     * 2) there's whitespace at the end of compLine
-     */
-
-    if (subCommandArgs.isNotEmpty || compLine.endsWith(' ')) {
-      return getArgsCompletions(
-        subCommandParser,
-        subCommandArgs,
-        compLine,
-        compPoint,
-        includeHidden: includeHidden,
-      );
-    }
-  } else {
-    // If we didn't find a command in the valid subset, maybe there is one
-    // in the parts that didn't parse?
-    // We'll scan specifically for a command that matches.
-    // We want the *first* one we find? Or the last?
-    // Usually the first one is the winner.
-
-    // heuristic: find a known command in args, assume it is the command
-    // and just pass the rest of the args to it.
-    // We only do this if we *failed* to parse a command normally.
-
-    for (var i = validSubSet.length; i < providedArgs.length; i++) {
-      final arg = providedArgs[i];
-      if (parser.commands.containsKey(arg)) {
-        sublog('found heuristic command "$arg" at index $i');
-        final subCommandParser = parser.commands[arg]!;
-        final subCommandArgs = providedArgs.sublist(i + 1);
-        if (subCommandArgs.isNotEmpty || compLine.endsWith(' ')) {
-          return getArgsCompletions(
-            subCommandParser,
-            subCommandArgs,
-            compLine,
-            compPoint,
-            includeHidden: includeHidden,
-          );
-        }
-      }
-    }
   }
 
   final removedItems = providedArgs.sublist(validSubSet.length);
   assert(removedItems.length + validSubSet.length == providedArgs.length);
 
-  sublog('removed items: ${helpfulToString(removedItems)}');
+  _sublog('removed items: ${helpfulToString(removedItems)}');
 
   final lastArg = providedArgs.last;
 
@@ -177,25 +120,24 @@ List<String> getArgsCompletions(
   if (removedItems.length == 1 && removedItems.single.startsWith('--')) {
     final removedItem = removedItems.single;
 
-    if (compLine.endsWith(' ')) {
-      // if the removed item maps to an option w/ allowed values
-      // we should return those values to complete against
-      final option = alignedArgsOptions[providedArgs.length - 1];
-      if (option != null &&
-          option.allowed != null &&
-          option.allowed!.isNotEmpty) {
-        assert(!option.isFlag);
-
-        sublog('completing all allowed value for option "${option.name}"');
-
-        return option.allowed!.toList();
-      }
-    } else {
-      sublog('completing the name of options starting with "$removedItem"');
+    if (!compLine.endsWith(' ')) {
+      _sublog('completing the name of options starting with "$removedItem"');
 
       return parserOptionCompletions
           .where((String option) => option.startsWith(removedItem))
           .toList();
+    }
+
+    // if the removed item maps to an option w/ allowed values
+    // we should return those values to complete against
+    final option = alignedArgsOptions.last;
+    final allowed = option?.allowed;
+    if (allowed != null && allowed.isNotEmpty) {
+      assert(!option!.isFlag);
+
+      _sublog('completing all allowed value for option "${option!.name}"');
+
+      return allowed.toList();
     }
   }
 
@@ -203,67 +145,148 @@ List<String> getArgsCompletions(
    * CASE: second-to-last arg is an option+allowed and lastArg is empty
    * then we should complete with the available options, right?
    */
-  if (providedArgs.length >= 2) {
-    final option = alignedArgsOptions[providedArgs.length - 2];
-    if (option != null) {
-      if (option.allowed != null && option.allowed!.isNotEmpty) {
-        assert(!option.isFlag);
-        sublog('completing option "${option.name}"');
+  final optionCompletions = _completeOptionValue(
+    alignedArgsOptions,
+    providedArgs,
+  );
+  if (optionCompletions != null) {
+    return optionCompletions;
+  }
 
-        final optionValue = providedArgs[providedArgs.length - 1];
+  switch (lastArg) {
+    case '' when removedItems.isEmpty:
+      /*
+       * CASE: no removed items and compLine ends in a space ->
+       * do command completion
+       */
+      _sublog('doing command completion');
+      return parser.commands.keys.toList();
+    case '--':
+      /*
+       * CASE: If we have '--', then let's naively complete all options
+       */
+      _sublog('Completing with all available options.');
+      return parserOptionCompletions;
+    case _ when !lastArg.startsWith('-'):
+      /*
+       * CASE: a partial command name?
+       * if the last arg doesn't start with a '-'
+       */
+      // for now, let's pretend this is partial command
+      _sublog('completing command names that start with "$lastArg"');
+      return parser.commands.keys
+          .where((String commandName) => commandName.startsWith(lastArg))
+          .toList();
+    case _ when parserOptionCompletions.contains(lastArg):
+      /*
+       * CASE: the last argument is valid, so we should return it
+       * if types the last char of a valid option, hitting tab should complete
+       * it
+       */
+      _sublog('completing final arg');
+      return [lastArg];
+  }
 
-        return option.allowed!.where((v) => v.startsWith(optionValue)).toList();
-      } else if (!option.isFlag) {
-        sublog('not providing completions. Waiting for option value');
-        return const [];
+  _sublog('Exhausted options. No suggestions.');
+
+  return const [];
+}
+
+void _sublog(Object obj) {
+  log(obj, Tag.getArgsCompletions);
+}
+
+void _validateProvidedArgs(List<String> providedArgs) {
+  // all arg entries: no empty items, no null items, all pre-trimmed
+  for (var i = 0; i < providedArgs.length; i++) {
+    final arg = providedArgs[i];
+    final msg = 'Arg at index $i with value "$arg" ';
+    if (arg.trim() != arg) throw StateError('$msg has whitespace');
+
+    if (i < (providedArgs.length - 1) && arg.isEmpty) {
+      throw StateError('$msg – Only the last arg can be an empty string');
+    }
+  }
+}
+
+({ArgParser parser, List<String> args})? _resolveSubCommand(
+  ArgParser parser,
+  List<String> providedArgs,
+  ({List<String> subset, ArgResults? result}) subsetTuple,
+  String compLine,
+) {
+  String? commandName;
+  int? commandIndex;
+
+  final subCommand = subsetTuple.result?.command;
+  if (subCommand != null) {
+    // get all of the args *after* the command name
+    // call in recursively with the sub command parser, right?
+    commandName = subCommand.name!;
+    commandIndex = providedArgs.indexOf(commandName);
+    assert(commandIndex >= 0);
+    _sublog(
+      'so, it seems we have command "$commandName" at '
+      'index $commandIndex',
+    );
+  } else {
+    // If we didn't find a command in the valid subset, maybe there is one
+    // in the parts that didn't parse?
+    // We'll scan specifically for a command that matches.
+    // We want the *first* one we find? Or the last?
+    // Usually the first one is the winner.
+
+    // heuristic: find a known command in args, assume it is the command
+    // and just pass the rest of the args to it.
+    // We only do this if we *failed* to parse a command normally.
+    for (var i = subsetTuple.subset.length; i < providedArgs.length; i++) {
+      final arg = providedArgs[i];
+      if (parser.commands.containsKey(arg)) {
+        _sublog('found heuristic command "$arg" at index $i');
+        commandName = arg;
+        commandIndex = i;
+        break;
       }
     }
   }
 
-  /*
-   * CASE: no removed items and compLine ends in a space ->
-   * do command completion
-   */
-  if (removedItems.isEmpty && lastArg == '') {
-    sublog('doing command completion');
+  if (commandIndex == null) return null;
 
-    return parser.commands.keys.toList();
-  }
+  final subCommandArgs = providedArgs.sublist(commandIndex + 1);
 
   /*
-   * CASE: If we have '--', then let's naively complete all options
+   * only start rockin' the sub command parser if
+   * 1) there's a start on sub args
+   * 2) there's whitespace at the end of compLine
    */
-  if (lastArg == '--') {
-    sublog('Completing with all available options.');
-    return parserOptionCompletions;
+  if (subCommandArgs.isNotEmpty || compLine.endsWith(' ')) {
+    return (parser: parser.commands[commandName!]!, args: subCommandArgs);
   }
+  return null;
+}
 
-  /*
-   * CASE: a partial command name?
-   * if the last arg doesn't start with a '-'
-   */
-  if (!lastArg.startsWith('-')) {
-    // for now, let's pretend this is partial command
+List<String>? _completeOptionValue(
+  List<Option?> alignedArgsOptions,
+  List<String> providedArgs,
+) {
+  if (providedArgs.length < 2) return null;
+  final option = alignedArgsOptions[providedArgs.length - 2];
+  if (option == null) return null;
 
-    sublog('completing command names that start with "$lastArg"');
+  final allowed = option.allowed;
+  if (allowed != null && allowed.isNotEmpty) {
+    assert(!option.isFlag);
+    _sublog('completing option "${option.name}"');
 
-    return parser.commands.keys
-        .where((String commandName) => commandName.startsWith(lastArg))
-        .toList();
+    final optionValue = providedArgs.last;
+
+    return allowed.where((v) => v.startsWith(optionValue)).toList();
   }
-
-  /*
-   * CASE: the last argument is valid, so we should return it
-   * if types the last char of a valid option, hitting tab should complete it
-   */
-  if (lastArg != '' && parserOptionCompletions.contains(lastArg)) {
-    sublog('completing final arg');
-    return [lastArg];
+  if (!option.isFlag) {
+    _sublog('not providing completions. Waiting for option value');
+    return const [];
   }
-
-  sublog('Exhausted options. No suggestions.');
-
-  return const [];
+  return null;
 }
 
 Option? _getOptionForArg(ArgParser parser, String arg) {
