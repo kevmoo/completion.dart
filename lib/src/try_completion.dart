@@ -59,7 +59,7 @@ int? tryCompletionImpl(
 
     Logger.root.onRecord.listen((e) {
       final loggerName = e.loggerName.split('.');
-      if (loggerName.isNotEmpty && loggerName.first == 'completion') {
+      if (loggerName.firstOrNull == 'completion') {
         loggerName.removeAt(0);
         assert(e.level == Level.INFO);
         logLine(
@@ -82,56 +82,56 @@ int? tryCompletionImpl(
   }
 
   log('Checking for completion on script:\t$scriptName');
-  if (args.length >= 3 && args[0] == completionCommandName && args[1] == '--') {
-    try {
-      log('Starting completion');
-      log('All args: $args');
-      log('completion-reported exe: ${args[2]}');
-
-      // There are 3 interesting env parameters passed by the completion logic
-      // COMP_LINE:  the full contents of the completion
-      final compLine = environment['COMP_LINE'];
-      if (compLine == null) {
-        throw StateError('Environment variable COMP_LINE must be set');
-      }
-
-      // COMP_CWORD: number of words. Also might be nice
-      // COMP_POINT: where the cursor is on the completion line
-      final compPointValue = environment[_compPointVar];
-      if (compPointValue == null || compPointValue.isEmpty) {
-        throw StateError(
-          'Environment variable $_compPointVar must be set and non-empty',
-        );
-      }
-      final compPoint = int.tryParse(compPointValue);
-
-      if (compPoint == null) {
-        throw FormatException(
-          'Could not parse $_compPointVar value '
-          '"$compPointValue" into an integer',
-        );
-      }
-
-      final trimmedArgs = args.sublist(3);
-
-      log('input args:     ${helpfulToString(trimmedArgs)}');
-
-      final completions = completer(trimmedArgs, compLine, compPoint);
-
-      log('completions: ${helpfulToString(completions)}');
-
-      for (final comp in completions) {
-        print(comp);
-      }
-      return 0;
-    } catch (ex, stack) {
-      log('An error occurred while attemping completion');
-      log(ex);
-      log(stack);
-      return 1;
-    }
+  if (args.length < 3 || args[0] != completionCommandName || args[1] != '--') {
+    log('Completion params not found');
+    return null;
   }
 
-  log('Completion params not found');
-  return null;
+  try {
+    log('Starting completion');
+    log('All args: $args');
+    log('completion-reported exe: ${args[2]}');
+
+    // There are 3 interesting env parameters passed by the completion logic
+    // COMP_LINE:  the full contents of the completion
+    final compLine = environment['COMP_LINE'];
+    if (compLine == null) {
+      throw StateError('Environment variable COMP_LINE must be set');
+    }
+
+    // COMP_CWORD: number of words. Also might be nice
+    // COMP_POINT: where the cursor is on the completion line
+    final compPointValue = environment[_compPointVar];
+    if (compPointValue == null || compPointValue.isEmpty) {
+      throw StateError(
+        'Environment variable $_compPointVar must be set and non-empty',
+      );
+    }
+    final compPoint = int.tryParse(compPointValue);
+
+    if (compPoint == null) {
+      throw FormatException(
+        'Could not parse $_compPointVar value '
+        '"$compPointValue" into an integer',
+      );
+    }
+
+    final trimmedArgs = args.sublist(3);
+
+    log('input args:     ${helpfulToString(trimmedArgs)}');
+
+    final completions = completer(trimmedArgs, compLine, compPoint);
+
+    log('completions: ${helpfulToString(completions)}');
+
+    for (final comp in completions) {
+      print(comp);
+    }
+    return 0;
+  } catch (ex, stack) {
+    log('An error occurred while attemping completion');
+    log(ex);
+    log(stack);
+    return 1;
+  }
 }

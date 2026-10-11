@@ -32,42 +32,39 @@ void main(List<String> args) {
     return;
   }
 
-  if (argResult.command != null) {
-    final subCommand = argResult.command!;
-    final subCommandParser = argParser.commands[subCommand.name]!;
+  final subCommand = argResult.command;
+  if (subCommand?.name == 'help') {
+    final subCommandParser = argParser.commands[subCommand!.name]!;
 
-    if (subCommand.name == 'help') {
-      // so the help command was run.
+    // so the help command was run.
 
-      // there are args here, too. Super fun.
-      if (subCommand.command != null) {
-        // we have a sub-sub command. Fun!
-        // let's get the sub-sub command parser
+    // there are args here, too. Super fun.
+    final subSubCommand = subCommand.command;
+    if (subSubCommand != null) {
+      // we have a sub-sub command. Fun!
+      // let's get the sub-sub command parser
 
-        final subSubCommand = subCommand.command!;
-        if (subSubCommand.name == 'assistance') {
-          print('Yes, we have help for help...just calling it assistance');
-          // let's print sub help. Very crazy.
-          print(subCommandParser.usage);
-          return;
-        } else {
-          throw StateError(
-            'no clue what that subCammand is: ${subSubCommand.name}',
-          );
-        }
+      if (subSubCommand.name != 'assistance') {
+        throw StateError(
+          'no clue what that subCammand is: ${subSubCommand.name}',
+        );
       }
-      // one sub-sub command: help. Really.
-
-      var usage = argParser.usage;
-
-      if (subCommand['yell'] as bool) {
-        usage = usage.toUpperCase();
-        print("I'm yelling, so the case of the available commands will be off");
-      }
-
-      print(usage);
+      print('Yes, we have help for help...just calling it assistance');
+      // let's print sub help. Very crazy.
+      print(subCommandParser.usage);
       return;
     }
+    // one sub-sub command: help. Really.
+
+    var usage = argParser.usage;
+
+    if (subCommand['yell'] as bool) {
+      usage = usage.toUpperCase();
+      print("I'm yelling, so the case of the available commands will be off");
+    }
+
+    print(usage);
+    return;
   }
 
   final name = argResult.rest.isEmpty ? 'World' : argResult.rest.first;
