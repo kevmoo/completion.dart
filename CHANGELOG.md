@@ -8,6 +8,7 @@
 - **BREAKING** The output of `generateCompletionScript` has been rewritten to
   generate a script for a single shell at a time, and now requires a `shell`
   argument to select which shell to generate a script for.
+- Require `sdk: ^3.12.0`.
 - **BREAKING** Default completion behavior now excludes options marked as
   `hide: true`.
 - Add support for Nushell (`nushell`) completion generation.
