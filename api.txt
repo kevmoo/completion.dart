@@ -1,0 +1,27 @@
+environment:
+  sdk: ^3.12.0
+executables:
+  shell_completion_generator
+package:completion/completion.dart:
+  completionCommandName (static const getter: String)
+  generateCompletionScript (function: String Function(List<String>, {required Shell shell}))
+  tryArgsCompletion (function: ArgResults? Function(List<String>, ArgParser, {bool includeHidden, deprecated bool? logFile}))
+  tryCompletion (function: int? Function(List<String>, List<String> Function(List<String>, String, int), {deprecated bool? logFile}))
+  Shell (enum):
+    bash (enum constant: Shell)
+    fish (enum constant: Shell)
+    nushell (enum constant: Shell)
+    values (static const getter: List<Shell>)
+    zsh (enum constant: Shell)
+    parse (static method: Shell? Function(String))
+    installation (getter: String)
+    template (getter: String)
+dart:core:
+  List (referenced)
+  String (referenced)
+  bool (referenced)
+  int (referenced)
+package:args/src/arg_parser.dart:
+  ArgParser (referenced)
+package:args/src/arg_results.dart:
+  ArgResults (referenced)
