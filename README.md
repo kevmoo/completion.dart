@@ -19,7 +19,7 @@ void main(List<String> args) {
 
 do this:
 
-```dart
+```dart @example example/readme_example.dart#usage
 import 'package:args/args.dart';
 import 'package:completion/completion.dart' as completion;
 
