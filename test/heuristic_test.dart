@@ -42,6 +42,6 @@ void main() {
       '--unknown',
       'junk',
       '--a',
-    ], (it) => it.isEmpty());
+    ], (it) => it.isEmpty);
   });
 }

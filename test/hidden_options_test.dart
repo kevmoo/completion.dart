@@ -12,7 +12,7 @@ void main() {
     final completions = getArgsCompletions(parser, ['--'], '--', 2);
     check(completions)
       ..contains('--visible')
-      ..not((it) => it.contains('--hidden'));
+      ..not(.it()..contains('--hidden'));
   });
 
   test('hidden options are completed when includeHidden is true', () {
@@ -40,7 +40,7 @@ void main() {
     final completions = getArgsCompletions(parser, ['--'], '--', 2);
     check(completions)
       ..contains('--visible')
-      ..not((it) => it.contains('--hidden'));
+      ..not(.it()..contains('--hidden'));
   });
 
   test('hidden flags are completed when includeHidden is true', () {

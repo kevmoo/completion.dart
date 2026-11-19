@@ -12,7 +12,7 @@ void main() {
   test('normal execution', () async {
     final process = await TestProcess.start(dartPath, [_exampleFilePath]);
 
-    await check(process.stdout).emitsThrough((it) => it.equals('Hello, World'));
+    await check(process.stdout).emitsThrough(.it()..equals('Hello, World'));
 
     await process.shouldExit(0);
   });
@@ -44,7 +44,7 @@ void main() {
       environment: {'COMP_POINT': '${compLine.length}', 'COMP_LINE': compLine},
     );
 
-    await check(process.stdout).emits((it) => it.equals('assistance'));
+    await check(process.stdout).emits(.it()..equals('assistance'));
 
     await process.shouldExit(0);
   });
