@@ -10,8 +10,8 @@ void main() {
       ..contains('###-begin-my_app-completion-###')
       ..contains('###-for-bash-###')
       ..contains('complete -F __my_app_completion my_app')
-      ..not((it) => it.contains('###-for-zsh-###'))
-      ..not((it) => it.contains('###-for-fish-###'))
+      ..not(.it()..contains('###-for-zsh-###'))
+      ..not(.it()..contains('###-for-fish-###'))
       ..contains('###-end-my_app-completion-###');
   });
 
@@ -20,8 +20,8 @@ void main() {
 
     check(script)
       ..contains('###-begin-my_app-completion-###')
-      ..not((it) => it.contains('###-for-bash-###'))
-      ..not((it) => it.contains('###-for-zsh-###'))
+      ..not(.it()..contains('###-for-bash-###'))
+      ..not(.it()..contains('###-for-zsh-###'))
       ..contains('###-for-fish-###')
       ..contains('complete -c my_app -f -a')
       ..contains('###-end-my_app-completion-###');
@@ -32,9 +32,9 @@ void main() {
 
     check(script)
       ..contains('###-begin-my_app-completion-###')
-      ..not((it) => it.contains('###-for-bash-###'))
-      ..not((it) => it.contains('###-for-zsh-###'))
-      ..not((it) => it.contains('###-for-fish-###'))
+      ..not(.it()..contains('###-for-bash-###'))
+      ..not(.it()..contains('###-for-zsh-###'))
+      ..not(.it()..contains('###-for-fish-###'))
       ..contains('###-for-nushell-###')
       ..contains('let __my_app_completion = {|spans|')
       ..contains(r'mut config = ($env.config | default {})')

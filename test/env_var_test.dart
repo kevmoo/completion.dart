@@ -15,7 +15,7 @@ void main() {
 
       exitCode = 0;
       final result = tryArgsCompletion(['completion', '--', 'exe'], parser);
-      check(result).isNull();
+      check(result).isNull;
       check(exitCode).equals(1);
     });
 
@@ -23,7 +23,7 @@ void main() {
       final parser = ArgParser()..addFlag('verbose');
       final result = tryArgsCompletion(['--verbose'], parser);
       check(result).isNotNull();
-      check(result!['verbose'] as bool).isTrue();
+      check(result!['verbose'] as bool).isTrue;
     });
   });
 
@@ -65,7 +65,7 @@ void main() {
         (a, l, p) => [],
         environment: {},
       );
-      check(exitCode).isNull();
+      check(exitCode).isNull;
     });
 
     test('exception in completer returns 1', () {
